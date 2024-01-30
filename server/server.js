@@ -15,7 +15,7 @@ const mongodbUrl = process.env.MONGODB_URL;
 const TheaterScreen = require('../server/model/threaterScreenModel');
 const Movies = require('../server/model/moviemodel');
 const Login = require("./model/loginmodel");
-
+const Event = require('./model/eventmodel');
 const Theater = require("./model/theatermodel");
 
 
@@ -56,6 +56,16 @@ const getmytickets = require('./controllers/userapis/getuserbookings');
 const payment = require('./controllers/userapis/payment');
 const updateuserprofile = require('./controllers/userapis/user_update_profile');
 const bookingstatictis = require('./controllers/theatreapis/getstatistics');
+const hostreg = require('./controllers/hostregistration')
+const getallhost = require('./controllers/hostapis/getallhost');
+const getallevents = require('./controllers/hostapis/getallevents');
+
+
+app.use("/api/hostreg", hostreg);
+app.use("/api/getallhost", getallhost);
+app.use('/api/getallevents', getallevents);
+
+
 
 
 app.use("/api/userprofile", updateuserprofile);
@@ -99,13 +109,27 @@ const storage = multer.diskStorage({
     },
 });
 
+const storage1 = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'public/event_poster'); // Set the destination folder for uploaded files
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
+    },
+});
+
 const upload = multer({ storage: storage });
+const upload1 = multer({ storage: storage1 });
+
+
+
 
 //----------------------------------------------------------------------------------
 
 
 app.post('/api/addmovies', upload.single('poster_url'), async (req, res) => {
     try {
+
         const { title, StreamingType, genre, duration, release_date, language, description, director, production, cast, trailer_url, } = req.body;
         const filename = req.file ? req.file.path : '';
         const poster_url = path.basename(filename);
@@ -113,7 +137,7 @@ app.post('/api/addmovies', upload.single('poster_url'), async (req, res) => {
         const newMovie = new Movies({ title, StreamingType, genre, duration, release_date, language, description, director, production, cast, poster_url, trailer_url, });
         const result = await newMovie.save();
         if (result) {
-            console.log("succccccccccccccccccccccccccces");
+            console.log("succccces");
             res.status(201).json({ message: 'Movie added successfully' });
         }
 
@@ -123,6 +147,60 @@ app.post('/api/addmovies', upload.single('poster_url'), async (req, res) => {
     }
 }
 );
+
+
+
+
+app.post('/api/addevent', upload1.single('poster_url'), async (req, res) => {
+    try {
+        const { userId, event_name, event_type, location, event_date, event_time, ticket_price, organizer, description, ticket_availability, seat_arrangement, image_url, rows, cols } = req.body;
+        const filename = req.file ? req.file.path : '';
+        const poster_url = path.basename(filename);
+        console.log(req.body);
+        // Create a new event instance using the Event model
+        const newEvent = new Event({
+            userId,
+            event_name,
+            event_type,
+            location,
+            event_date,
+            event_time,
+            ticket_price,
+            organizer,
+            description,
+            ticket_availability,
+            seat_arrangement,
+            poster_url,
+            status: 'Coming Soon',
+            rows,
+            cols
+        });
+
+        // Save the event to the database
+        const savedEvent = await newEvent.save();
+
+        // Respond with a success message and the saved event details
+        res.json({ message: "Event Added Successfully", event: savedEvent });
+    } catch (error) {
+        console.error('Error creating event:', error);
+        res.status(500).json({ message: "Operation Failed" });
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 app.patch('/api/update/:movieId', upload.single('poster_url'), async (req, res) => {

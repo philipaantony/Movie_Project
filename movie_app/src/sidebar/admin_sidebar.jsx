@@ -114,6 +114,15 @@ function AdminSidebar(props) {
                   </a>
                 </li>
               </Link>
+              <Link to="/viewhost">
+                <li className={props.host}>
+                  <a href="application-checkout.html" className="sidebar-link">
+                    <i className="bi bi-basket-fill"></i>
+                    <span>View Host Company</span>
+                  </a>
+                </li>
+              </Link>
+
 
               <li className="sidebar-title">Raise Support</li>
             </ul>

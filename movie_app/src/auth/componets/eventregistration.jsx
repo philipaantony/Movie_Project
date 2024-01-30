@@ -8,30 +8,30 @@ function EventRegistration() {
     const {register,handleSubmit,formState:{ errors },} = useForm({mode: "onChange"});
     const navigate = useNavigate();
     const onSubmit = (data) =>
-     {
-       console.log(data);
-       
-       axios.post('-----------------', data)
-      .then((response) => {
-        console.log('Theater Registered:', response.data);
-        if(response.data.navigation===true)
-        {
-        alert(response.data.message);
-          navigate("/requestpending");
-        }
-        if(response.data.navigation===false)
-        {
-        alert(response.data.message);
-         
-        }
+    {
+      console.log(data);
+      
+      axios.post('http://localhost:5000/api/hostreg', data)
+     .then((response) => {
+       console.log('Host Registered:', response.data);
+       if(response.data.navigation===true)
+       {
+       alert(response.data.message);
+         navigate("/requestpending");
+       }
+       if(response.data.navigation===false)
+       {
+       alert(response.data.message);
         
-      })
-      .catch((error) => {
-        alert("Something Went Wrong");
-        console.error('Error while Registering theater:', error);
-   
-      });
-    }
+       }
+       
+     })
+     .catch((error) => {
+       alert("Something Went Wrong");
+       console.error('Error while Registering theater:', error);
+  
+     });
+   }
 
     const validationRules = {
       name: {

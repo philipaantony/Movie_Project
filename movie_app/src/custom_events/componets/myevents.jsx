@@ -1,37 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { baseUrl } from "../../config/config";
 import GoBackButton from "../../public/gobackButton";
+import Viewscreenorientation from "../../theater/componets/viewscreenorientation";
 
 function AdminViewPostedMovies() {
-  const events = [
-    {
-      eventName: 'Event 1',
-      description: 'Description for Event 1',
-      location: 'Location 1',
-      capacity: 100,
-      type: 'Type 1',
-      time: '10:00 AM',
-      date: '2024-01-25',
-      status: 'Active',
-      hostedBy: 'Host 1',
-      posterImg: "assets/images/customevents/b1.png",
-      _id: '1',
-    },
-    {
-        eventName: 'Event 1',
-        description: 'Description for Event 1',
-        location: 'Location 1',
-        capacity: 100,
-        type: 'Type 1',
-        time: '10:00 AM',
-        date: '2024-01-25',
-        status: 'Active',
-        hostedBy: 'Host 1',
-        posterImg: "assets/images/customevents/b2.png",
-        _id: '1',
-      },
-    // Add more events as needed
-  ];
+  const [events, setEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios.get("http://localhost:5000/api/getallevents")
+      .then(response => {
+        setEvents(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching events:', error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div id="main">
@@ -39,55 +31,41 @@ function AdminViewPostedMovies() {
         <h2>My Events</h2>
         <GoBackButton />
         {events.map((event, index) => {
-          // Format the Release Date to show in MM/DD/YYYY format
-          const releaseDate = new Date(event.date).toLocaleDateString();
+          const eventdate = new Date(event.event_date).toLocaleDateString();
 
           return (
             <div className="card mb-3" key={index}>
               <div className="row g-0">
-                <div className="col-md-4">
-                  <img
-                    src={event.posterImg}
-                    alt={event.eventName}
-                    style={{
-                        height:"290px",
-                      maxWidth: "200px",
-                      margin: "30px",
-                      borderRadius: "10px",
-                      position: "absolute",
-                      top: "0",
-                      left: "0",
-                      transition: "transform 0.2s",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "scale(1.14)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "scale(1)";
-                    }}
-                  />
-                </div>
                 <div className="col-md-8">
                   <div className="card-body">
-                    <h2 className="card-title">{event.eventName}</h2>
+                  <span
+  className={`badge ${new Date(eventdate) < new Date() ? 'bg-danger' : 'bg-warning'}`}
+  style={{ position: "absolute", top: "10px", right: "10px", fontSize: "14px" }}
+>
+  {new Date(eventdate) < new Date() ? 'Expired' : 'Coming soon'}
+</span>
+
+
+                    <h2 className="card-title">{event.event_name}</h2>
                     <div className="row">
                       <div className="col">
                         <p className="card-text">
-                          <strong>Type:</strong> {event.type}
+                          <strong>Type:</strong> {event.event_type}
                         </p>
                         <p className="card-text">
-                          <strong>Duration:</strong> {event.duration} Hr
+                          <strong>Price:</strong> ${event.ticket_price}
                         </p>
-                        <p className="card-text">
-                          <strong>Status:</strong> {event.status}
-                        </p>
+                      
                       </div>
                       <div className="col">
+                      <p className="card-text">
+  <strong>Date:</strong> {eventdate}
+  {new Date(eventdate) < new Date() ? (
+    <span className="text-danger"> (Event Expired)</span>
+  ) : null}
+</p>
                         <p className="card-text">
-                          <strong>Date:</strong> {releaseDate}
-                        </p>
-                        <p className="card-text">
-                          <strong>Time:</strong> {event.time}
+                          <strong>Time:</strong> {event.event_time}
                         </p>
                       </div>
                     </div>
@@ -98,20 +76,52 @@ function AdminViewPostedMovies() {
                       <strong>Location:</strong> {event.location}
                     </p>
                     <p className="card-text">
-                      <strong>Hosted By:</strong> {event.hostedBy}
+                      <strong>Hosted By:</strong> {event.organizer}
+                    </p>
+                    <p className="card-text">
+                      <strong>Ticket Availability:</strong> {event.ticket_availability === 0 ? "Not Available" : event.ticket_availability}
                     </p>
 
-                    <div className="row">
-                      <div className="col align-self-start">
-                        <button
-                          type="button"
-                          className="btn btn-primary"
-                          style={{ marginRight: "20px" }}
-                        >
-                          Update
-                        </button>
-                      </div>
-                    </div>
+                    <p className="card-text">
+                      <strong>Seat Arrangement:</strong>{" "}
+                      {event.seat_arrangement === "no" ? "Arrangement Not Available" : event.seat_arrangement}
+                    </p>
+
+                    {event.seat_arrangement !== "no" && (
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
+                        data-bs-toggle="modal"
+                        data-bs-target={`#seatArrangementModal${index}`}
+                        style={{ marginRight: "20px" }}
+                      >
+                        View Seating Arrangement
+                      </button>
+                    )}
+                  </div>
+                </div>
+                <div className="col-md-4">
+                  <img
+                    src={`${baseUrl}/event_poster/${event.poster_url}`}
+                    alt={event.event_name}
+                    style={{
+                      height: "290px",
+                      maxWidth: "200px",
+                      margin: "30px",
+                      borderRadius: "10px",
+                      transition: "transform 0.2s",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "scale(1.14)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "scale(1)";
+                    }}
+                  />
+                </div>
+                <div className="row">
+                  <div className="col align-self-start">
+                    //
                   </div>
                 </div>
               </div>
@@ -119,6 +129,54 @@ function AdminViewPostedMovies() {
           );
         })}
       </div>
+
+      {/* Modal for Seating Arrangement */}
+      {events.map((event, index) => (
+        <div
+          className="modal fade"
+          id={`seatArrangementModal${index}`}
+          key={index}
+          tabIndex="-1"
+          aria-labelledby={`seatArrangementModalLabel${index}`}
+          aria-hidden="true"
+        >
+          <div className="modal-dialog modal-lg">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title" id={`seatArrangementModalLabel${index}`}>
+                  Seating Arrangement - {event.event_name}
+                </h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="modal-body">
+                {/* Add your seating arrangement component here */}
+                {/* Example: <SeatingArrangementComponent event={event} /> */}
+                <Viewscreenorientation
+                title={"Event Seating Arrangement"}
+                        rows={event.rows}
+                        cols={event.cols}
+                        orientationProp={event.seat_arrangement}
+                      />
+
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  data-bs-dismiss="modal"
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }

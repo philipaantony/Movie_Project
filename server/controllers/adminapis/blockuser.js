@@ -46,7 +46,7 @@ router.post('/:id', async (req, res) => {
 
         const id = req.params.id; // Get the _id from the route parameter
         const { email, status, reason } = req.body;
-        console.log(email);
+        console.log(req.body);
         console.log(status);
         const user = await Login.findByIdAndUpdate(id, { status: status });
 
@@ -55,7 +55,8 @@ router.post('/:id', async (req, res) => {
         }
         else {
             if (status === 'blocked') {
-                const emailsend = await sendBlockEmail(email, reason);
+                console.log("here")
+                //const emailsend = await sendBlockEmail(email, reason);
             }
             return res.status(200).json({ message: 'Status Updated' });
         }

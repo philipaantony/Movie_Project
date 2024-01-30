@@ -49,6 +49,7 @@ import MyEventPage from "./custom_events/pages/myevents-page";
 import MyStreamsPage from "./custom_events/pages/mystreams-page";
 import AddnewEventPage from "./custom_events/pages/addneweventpage";
 import AddShortFilmPage from "./custom_events/pages/add-shortfilmpage";
+import AdminViewHostPage from "./admin/pages/admin_view_host_page";
 
 export default function App() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -85,6 +86,7 @@ export default function App() {
             <>
               {/* Admin routes */}
 
+              <Route path="/viewhost" element={<AdminViewHostPage />} />
               <Route path="/viewpostedmovies" element={<AdminViewPostedMoviesPage />} />
               <Route path="/updatemovie" element={<AdminUpadateMoviePage />} />
               <Route path="/viewusers" element={<AdminViewVsersPage />} />
@@ -121,18 +123,18 @@ export default function App() {
               <Route path="/viewmyscreens" element={<Viewtheaterlistpage />} />
               <Route path="/seat" element={<CreateSeatOrientation />} />
             </>
-          ) : (
-            <>{/* Public routes */}</>
-          )}
+          ) : usertype === "host" ? (
+            <>
+              <Route path="/eventhome" element={<EventHomeDashPage />} />
+              <Route path="/myevents" element={<MyEventPage />} />
+              <Route path="/mystreams" element={<MyStreamsPage />} />
+              <Route path="/addnewevent" element={< AddnewEventPage />} />
+              <Route path="/addshortfilm" element={<AddShortFilmPage />} />
+            </>
+          ) : (<>
 
+          </>)}
 
-
-
-          <Route path="/eventhome" element={<EventHomeDashPage />} />
-          <Route path="/myevents" element={<MyEventPage />} />
-          <Route path="/mystreams" element={<MyStreamsPage />} />
-          <Route path="/addnewevent" element={< AddnewEventPage />} />
-          <Route path="/addshortfilm" element={<AddShortFilmPage />} />
 
 
 
@@ -147,6 +149,9 @@ export default function App() {
           <Route path="/forgotpwd" element={<ForgotPasswordPage />} />
           <Route path="/register" element={<Registrationpage />} />
           <Route path="*" element={<Error404 />} />
+
+
+
         </Routes>
       </Router>
     </div>

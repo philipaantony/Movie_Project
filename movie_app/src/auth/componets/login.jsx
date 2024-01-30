@@ -68,7 +68,23 @@ function Login() {
             dispatch(login({userid:userId ,useremail: email }));
             navigate("/theaterhome");
           }
-        } else if (response.data.existingLogin.status === "Not-Authorised") {
+        } 
+        else if(usertype === "host")
+        {
+          if (status === "Authorized") 
+          {
+            dispatch(login({userid:userId ,useremail: email }));
+            navigate("/eventhome");
+            alert("Login Successfull as Host")
+          }
+          else{
+          
+            alert("Application Under Process(Host)");
+            navigate("/requestpending");
+          }
+          
+        }
+        else if (response.data.existingLogin.status === "Not-Authorised") {
           alert("Invalid credentials");
         } else {
           alert("Invalid credentials");

@@ -1,8 +1,20 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { logout } from "../../Redux/user/userSlice";
 
 function EventSidebar(props) {
+
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  const useremail = localStorage.getItem("email");
+
+  const handleLogout = () => {
+    localStorage.clear();
+    dispatch(logout({ userid: "", useremail: "" }));
+    navigate("/", { replace: true });
+  };
 
     useEffect(() => {
         function hideSidebarOnResize() {
@@ -39,15 +51,16 @@ function EventSidebar(props) {
               <div className="ms-3 name">
                 <h5 className="font-bold">Event Panel</h5>
                 <h9 className="text-muted mb-0" style={{ fontSize: "13px" }}>
-                  {'eventhome@gmail.com'}{" "}
+                  {useremail}{" "}
                 </h9>
                 <button
                   onClick={() => {
+                    
                     const confirmLogout = window.confirm(
                       "Are you sure you want to log out?"
                     );
                     if (confirmLogout) {
-                     // handleLogout();
+                      handleLogout();
                     }
                   }}
                   className="btn btn-danger"
