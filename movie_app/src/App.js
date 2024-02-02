@@ -50,6 +50,8 @@ import MyStreamsPage from "./custom_events/pages/mystreams-page";
 import AddnewEventPage from "./custom_events/pages/addneweventpage";
 import AddShortFilmPage from "./custom_events/pages/add-shortfilmpage";
 import AdminViewHostPage from "./admin/pages/admin_view_host_page";
+import ViewMyEvents from "./user/pages/viewmyevents";
+import UserBookEvents from "./user/pages/user_book_event";
 
 export default function App() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -81,6 +83,10 @@ export default function App() {
               <Route path="/userabout" element={<UserAboutPage />} />
               <Route path="/viewmovie" element={<UserViewMovie />} />
               <Route path="/userprofile" element={<UserProfilePage />} />
+
+
+              <Route path="/view-events" element={<ViewMyEvents />} />
+              <Route path="/book-event" element={<UserBookEvents />} />
             </>
           ) : usertype === "admin" ? (
             <>
@@ -125,6 +131,7 @@ export default function App() {
             </>
           ) : usertype === "host" ? (
             <>
+
               <Route path="/eventhome" element={<EventHomeDashPage />} />
               <Route path="/myevents" element={<MyEventPage />} />
               <Route path="/mystreams" element={<MyStreamsPage />} />

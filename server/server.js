@@ -59,11 +59,13 @@ const bookingstatictis = require('./controllers/theatreapis/getstatistics');
 const hostreg = require('./controllers/hostregistration')
 const getallhost = require('./controllers/hostapis/getallhost');
 const getallevents = require('./controllers/hostapis/getallevents');
+const geteventbyid = require('./controllers/hostapis/geteventbyid');
 
 
 app.use("/api/hostreg", hostreg);
 app.use("/api/getallhost", getallhost);
 app.use('/api/getallevents', getallevents);
+app.use('/api/geteventbyid', geteventbyid);
 
 
 

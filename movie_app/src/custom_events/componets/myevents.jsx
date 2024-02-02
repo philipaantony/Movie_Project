@@ -7,19 +7,23 @@ import Viewscreenorientation from "../../theater/componets/viewscreenorientation
 function AdminViewPostedMovies() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const userid = localStorage.getItem("userId");
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api/getallevents")
-      .then(response => {
-        setEvents(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching events:', error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+    if (userid) {
+      axios.get(`http://localhost:5000/api/geteventbyid/${userid}`)
+        .then(response => {
+          setEvents(response.data);
+        })
+        .catch(error => {
+          console.error('Error fetching events:', error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    }
+  }, [userid]);
+  
 
   if (loading) {
     return <p>Loading...</p>;

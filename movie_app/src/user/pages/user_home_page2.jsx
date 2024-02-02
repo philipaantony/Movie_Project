@@ -9,6 +9,7 @@ function UserHomePage2() {
 
   const navigate = useNavigate();
   const [movies, setMovies] = useState([]);
+  const [events, setEvents] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
@@ -22,6 +23,21 @@ function UserHomePage2() {
       .catch((error) => {
         console.error("Error fetching movies:", error);
       });
+
+
+      axios
+      .get("http://localhost:5000/api/getallevents")
+      .then((response) => {
+        console.log(response.data);
+        setEvents(response.data);
+      })
+      .catch((error) => {
+        console.error("Error fetching movies:", error);
+      });
+
+
+
+
   }, []);
 
   const handleSearch = (event) => {
@@ -294,10 +310,11 @@ function UserHomePage2() {
             )}
           </div>
 
+
+
           <div
             className="container-fluid"
-            style={{ paddingLeft: "60px", paddingRight: "60px" }}
-          >
+            style={{ paddingLeft: "60px", paddingRight: "60px" }}>
             <section className="mt-5">
               <h2>Now In Theaters</h2>
               <div className="row">
@@ -465,6 +482,68 @@ function UserHomePage2() {
               </div>
             </section>
           </div>
+
+
+
+          <div
+  className="container-fluid"
+  style={{ paddingLeft: "60px", paddingRight: "60px" }}
+>
+  <section className="mt-5">
+    <h2>OutDoor Events</h2>
+    <div className="row">
+      {events.map((eventData) => {
+        const data = {
+          event_id: eventData._id,
+          event_name: eventData.event_name,
+          event_type: eventData.event_type,
+          eventlocation: eventData.location,
+          event_date: eventData.event_date,
+          event_time: eventData.event_time,
+          ticket_price: eventData.ticket_price,
+          organizer: eventData.organizer,
+          description: eventData.description,
+          ticket_availability: eventData.ticket_availability,
+          seat_arrangement: eventData.seat_arrangement,
+          poster_url: eventData.poster_url,
+          status: eventData.status,
+          rows: eventData.rows,
+          cols: eventData.cols,
+        };
+        if (eventData.event_name) {
+          return (
+            <div
+              className="col-lg-2 col-md-4 col-6 mb-4"
+              onClick={() => {
+                navigate("/view-events", {
+                  state: data,
+                });
+              }}
+              key={eventData.id}
+            >
+              <div
+                className="card"
+                style={{ height: "400px", overflow: "hidden" }}
+              >
+                <img
+                  src={`http://localhost:5000/event_poster/${eventData.poster_url}`}
+                  className="card-img-top"
+                  alt={eventData.event_name}
+                  style={{ objectFit: "cover", height: "100%" }}
+                />
+                <div className="card-body">
+                  <h5 className="card-title">{eventData.event_name}</h5>
+                  <p className="card-text">{eventData.event_type}</p>
+                </div>
+              </div>
+            </div>
+          );
+        }
+      })}
+    </div>
+  </section>
+</div>;
+
 
           {/*------------------------------------------------------------------------------ */}
           <UserCarousel />
