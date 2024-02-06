@@ -19,6 +19,7 @@ function AdminViewPostedMovies() {
           console.error('Error fetching events:', error);
         })
         .finally(() => {
+          
           setLoading(false);
         });
     }

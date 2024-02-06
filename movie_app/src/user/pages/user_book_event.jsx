@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import UserNavBar from '../usernavbar/usernavbar';
-import Footer from '../../footer/footer';
+import UserNavBar from "../usernavbar/usernavbar";
+import Footer from "../../footer/footer";
 import GoBackButton from "../../public/gobackButton";
+import { baseUrl } from "../../config/config";
+import axios from "axios";
 
 function UserBookEvents() {
   const location = useLocation();
@@ -11,8 +13,7 @@ function UserBookEvents() {
   const rows = location.state.rows;
   const columns = location.state.cols;
   const seatPrice = location.state.ticket_price;
-  
-  
+
   const ticket_availability = location.state.ticket_availability;
   const [ticketQuantity, setTicketQuantity] = useState(1);
 
@@ -20,7 +21,6 @@ function UserBookEvents() {
   const [bookedSeats, setBookedSeats] = useState("");
   const [totalPrice, settotalPrice] = useState(seatPrice);
   const totalPrice2 = selectedSeats.length * seatPrice;
-
 
   const alphabet = Array.from({ length: 26 }, (_, i) =>
     String.fromCharCode(65 + i)
@@ -40,37 +40,121 @@ function UserBookEvents() {
       setSelectedSeats((prevSeats) => [...prevSeats, seatNumber]);
     }
   };
-  
 
   const handleIncrease = () => {
     setTicketQuantity(ticketQuantity + 1);
     settotalPrice(seatPrice * (ticketQuantity + 1)); // Use the updated ticketQuantity
   };
-  
+
   const handleDecrease = () => {
     if (ticketQuantity > 1) {
       setTicketQuantity(ticketQuantity - 1);
       settotalPrice(seatPrice * (ticketQuantity - 1)); // Use the updated ticketQuantity
     }
   };
-  const handlePayment = () => {
-    // Add your logic for handling the payment
-    console.log(`Proceed to payment for ${ticketQuantity} ticket(s).`);
+
+  function loadScript(src) {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  }
+
+  async function displayRazorpay(totalPrice) {
+    const res = await loadScript(
+      "https://checkout.razorpay.com/v1/checkout.js"
+    );
+
+    if (!res) {
+      alert("Razorpay SDK failed to load. Are you online?");
+      return;
+    }
+
+    // creating a new order
+    const result = await axios.post("http://localhost:5000/payment/orders", {
+      totalPrice,
+    });
+
+    if (!result) {
+      alert("Server error. Are you online?");
+      return;
+    }
+
+    // Getting the order details back
+    const { amount, id: order_id, currency } = result.data;
+
+    const options = {
+      key: "rzp_test_vwFYRANZsk49Qu", // Enter the Key ID generated from the Dashboard
+      amount: amount.toString(),
+      currency: currency,
+      name: "Movie Verse.",
+      description: "Test Transaction",
+      image: {},
+      order_id: order_id,
+      handler: async function (response) {
+        const data = {
+          orderCreationId: order_id,
+          razorpayPaymentId: response.razorpay_payment_id,
+          razorpayOrderId: response.razorpay_order_id,
+          razorpaySignature: response.razorpay_signature,
+        };
+
+        const result = await axios.post(
+          "http://localhost:5000/payment/success",
+          data
+        );
+        if (result.data.msg === "success") {
+          alert("Payment done successfully!. Your booking is processing");
+        }
+        const orderId = result.data.orderId;
+        console.log(orderId);
+        const paymentId = result.data.paymentId;
+        console.log(paymentId);
+        if (result.data.msg === "success") {
+          bookmyevent(orderId, paymentId, amount.toString());
+        }
+      },
+      prefill: {
+        name: "Movie Verse",
+        email: "movieverse@example.com",
+        contact: "9999999999",
+      },
+      notes: {
+        address: "Movie verse Corporate Office",
+      },
+      theme: {
+        color: "#61dafb",
+      },
+    };
+
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+  }
+
+  const bookmyevent = (orderId, paymentId, amount) => {
+    console.log(orderId);
+    console.log(paymentId);
+    console.log(amount);
   };
 
   return (
     <div>
-     
       <UserNavBar activehome="active" />
-    
+
       {ticket_availability === 0 ? (
         <>
           {myorientation ? (
             <>
               <div>
-              <GoBackButton/>
+                <GoBackButton />
                 <center>
-                  
                   <h2>Select Your Seats</h2>
                 </center>
                 <div
@@ -166,11 +250,9 @@ function UserBookEvents() {
                       <p>Buy Now!</p>
                       <button
                         className="btn btn-danger"
-                        onClick={() => {
-                          // Perform your action on button click
-                        }}
+                        onClick={() => displayRazorpay(totalPrice2)}
                       >
-                         Pay {totalPrice2}
+                        Pay ₹{totalPrice2}
                       </button>
                       <button
                         style={{ marginLeft: "20px" }}
@@ -190,47 +272,37 @@ function UserBookEvents() {
         </>
       ) : (
         <>
-         
+          <GoBackButton />
 
-
-
-         <GoBackButton/>
-
-         <div className="card text-center">
-       
-      <div className="card-body">
-        <h5 className="card-title">Event Ticket Booking</h5>
-        <div className="d-flex justify-content-center align-items-center mb-3">
-          <button
-            className="btn btn-danger"
-            onClick={handleDecrease}
-          >
-            -
-          </button>
-          <span className="quantity mx-3">{ticketQuantity}</span>
-          <button
-            className="btn btn-danger"
-            onClick={handleIncrease}
-          >
-            +
-          </button>
-        </div>
-        <p className="card-text">
-          <strong>Total Tickets:</strong> {ticketQuantity}
-          <br />
-          <strong>Total Amount:</strong> {totalPrice}
-        </p>
-        <p className="card-text">
-          By booking tickets, you agree to our{' '}
-          <a href="">Privacy Policy</a>.
-        </p>
-        <button className="btn btn-primary" onClick={handlePayment}>
-          Proceed to Payment
-        </button>
-      </div>
-    </div>
-
-
+          <div className="card text-center">
+            <div className="card-body">
+              <h5 className="card-title">Event Ticket Booking</h5>
+              <div className="d-flex justify-content-center align-items-center mb-3">
+                <button className="btn btn-danger" onClick={handleDecrease}>
+                  -
+                </button>
+                <span className="quantity mx-3">{ticketQuantity}</span>
+                <button className="btn btn-danger" onClick={handleIncrease}>
+                  +
+                </button>
+              </div>
+              <p className="card-text">
+                <strong>Total Tickets:</strong> {ticketQuantity}
+                <br />
+                <strong>Total Amount:</strong> {totalPrice}
+              </p>
+              <p className="card-text">
+                By booking tickets, you agree to our{" "}
+                <a href="">Privacy Policy</a>.
+              </p>
+              <button
+                className="btn btn-primary"
+                onClick={() => displayRazorpay(totalPrice)}
+              >
+                Proceed to Payment
+              </button>
+            </div>
+          </div>
         </>
       )}
       <Footer />
