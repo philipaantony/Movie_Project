@@ -7,33 +7,32 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 import GoBackButton from '../../public/gobackButton';
 
-
-function MyEventTickets() {
+function UserViewMyTickets() {
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
   const [ticketDetails, setTicketDetails] = useState([]);
 
-  const handleNavigation = (selectedSeats) => {
+  const handleNavigation = (selectedTicket) => {
     const passingData = {
-      posterurl: selectedSeats[0].poster_url,
-      title: selectedSeats[0].title,
-      theaterName: selectedSeats[0].theater_name,
-      screenName: selectedSeats[0].screen_name,
-      time: selectedSeats[0].time,
-      bookingDate: selectedSeats[0].bookingdate,
-      bookingStatus: selectedSeats[0].bookingstatus,
-      razorpayOrderID: selectedSeats[0].razorpayOrderID,
-      paymentID: selectedSeats[0].paymentId,
-      selectedSeats: selectedSeats.map(t => t.selectedSeats).join(', '),
-
+      title:selectedTicket[0].eventId.event_name,
+      amount: selectedTicket[0].amount,
+      bookingDate: selectedTicket[0].bookingDate,
+      location: selectedTicket[0].location,
+      paymentId: selectedTicket[0].paymentId,
+      paymentTime: selectedTicket[0].paymentTime,
+      posterUrl: selectedTicket[0].posterUrl,
+      razorpayOrderId: selectedTicket[0].razorpayOrderId,
+      seatNumber: selectedTicket[0].seatNumber,
+      eventStartsAt: selectedTicket[0].eventStartsAt,
+      status: selectedTicket[0].status,
+      ticketCount: selectedTicket[0].ticketCount
     };
-
-    navigate('/myticket', { state: passingData });
+    navigate('/my-event-ticket', { state: passingData });
   };
 
   useEffect(() => {
     // Fetch ticket details by userId
-    axios.get(`${baseUrl}/api/getTicketDetails/${userId}`)
+    axios.get(`${baseUrl}/api/getmyeventbooking/${userId}`)
       .then((response) => {
         console.log(response.data);
         setTicketDetails(response.data);
@@ -46,14 +45,12 @@ function MyEventTickets() {
   return (
     <div>
       <UserNavBar />
-
       <div className="container mt-5">
-        <GoBackButton />
+        <GoBackButton/>
         <h2>Ticket Details</h2>
         <ButtonGroup variant="outlined" aria-label="Basic button group">
           <Button onClick={() => { navigate('/mybookings') }}>Movie Tickets</Button>
           <Button onClick={() => { navigate('/mybookings-events') }}>Events Tickets</Button>
-
         </ButtonGroup>
         {ticketDetails.length > 0 ? (
           <div className="card mt-3">
@@ -61,13 +58,12 @@ function MyEventTickets() {
               <table className="table">
                 <thead>
                   <tr>
-                    <th>Movie</th>
-                    <th>Show Details</th>
+                    <th>Event Name</th>
+                    <th>Event Details</th>
                     <th>Booking Details</th>
                     <th>Payment ID</th>
                     <th>View My Ticket</th>
-                    <th>Seat No</th>
-
+                    <th>Seat No/Count</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -81,37 +77,38 @@ function MyEventTickets() {
                           <>
                             <td rowSpan={selectedSeats.length}>
                               <div className="movie-card">
-                                <h4>{ticket.title}</h4>
+                                <h4>{ticket.eventId.event_name}</h4>
                                 <img
-                                  src={`${baseUrl}/movie_poster/${ticket.poster_url}`}
-                                  alt={`${ticket.title} Poster`}
+                                  src={`${baseUrl}/event_poster/${ticket.posterUrl}`}
+                                  alt={`${ticket.event_name} Poster`}
                                   style={{ width: '100px', height: '150px', borderRadius: '10px' }}
                                 />
                               </div>
                             </td>
                             <td rowSpan={selectedSeats.length}>
-                              <strong>Theater: {ticket.theater_name}</strong><br />
-                              <strong>Screen Name: {ticket.screen_name}</strong><br />
-                              <strong>Show Time: {ticket.time}</strong><br />
-                              <strong>Booking Date:</strong> {new Date(ticket.bookingdate).toLocaleDateString()}<br />
+                           
+                              <strong>Organizer: {ticket.organizer}</strong><br />
+                              <strong>Location: {ticket.location}</strong><br />
+                              <strong>Event starts at: {ticket.eventStartsAt}</strong><br />
+                              <strong>Booking Date:</strong> {new Date(ticket.bookingDate).toLocaleDateString()}<br />
                             </td>
                             <td rowSpan={selectedSeats.length}>
-                              <strong>Booking Status:</strong> {ticket.bookingstatus}<br />
-                              <strong>Razorpay Order ID:</strong> {ticket.razorpayOrderID}
+                              <strong>Booking Status:</strong> {ticket.status}<br />
+                              <strong>Razorpay Order ID:</strong> {ticket.razorpayOrderId}
                             </td>
                             <td rowSpan={selectedSeats.length}>
                               {ticket.paymentId}
                             </td>
-
                             <td rowSpan={selectedSeats.length}>
                               <button className='btn btn-success' onClick={() => handleNavigation(selectedSeats)}>My Ticket</button>
                             </td>
                           </>
                         )}
                         <td>
-                          <div className='cols'>
-                            {ticket.selectedSeats}
-                          </div>
+                        <div className='cols'>
+  {ticket.seatNumber === "" ? ticket.ticketCount : ticket.seatNumber}
+</div>
+
                         </td>
                       </tr>
                     );
@@ -122,18 +119,19 @@ function MyEventTickets() {
           </div>
         ) : (
           <div className="card mt-3">
-            <div className="card-body">
-              <i className="bi bi-exclamation-circle text-danger fs-1"></i> {/* Bootstrap icon */}
-              <h5 className="card-title">No Ticket Details Found</h5>
-              <p className="card-text">We couldn't find any ticket details for you.</p>
-              <p className="card-text">Please try again later or contact support for assistance.</p>
-
-            </div>
+          <div className="card-body">
+               <i className="bi bi-exclamation-circle text-danger fs-1"></i> {/* Bootstrap icon */}
+            <h5 className="card-title">No Ticket Details Found</h5>
+            <p className="card-text">We couldn't find any ticket details for you.</p>
+            <p className="card-text">Please try again later or contact support for assistance.</p>
+         
           </div>
+        </div>
+        
         )}
       </div>
     </div>
   );
 }
 
-export default MyEventTickets;
+export default UserViewMyTickets;

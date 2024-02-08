@@ -60,13 +60,18 @@ const hostreg = require('./controllers/hostregistration')
 const getallhost = require('./controllers/hostapis/getallhost');
 const getallevents = require('./controllers/hostapis/getallevents');
 const geteventbyid = require('./controllers/hostapis/geteventbyid');
+const eventbooking = require('./controllers/hostapis/eventbooking');
+const geteventseats = require('./controllers/hostapis/geteventbookedseats');
+const getmyeventbookings = require('./controllers/userapis/getmyeventbookings');
 
 
 app.use("/api/hostreg", hostreg);
 app.use("/api/getallhost", getallhost);
 app.use('/api/getallevents', getallevents);
 app.use('/api/geteventbyid', geteventbyid);
-
+app.use('/api/eventbookings', eventbooking);
+app.use('/api/fetcheventseats', geteventseats);
+app.use('/api/getmyeventbooking', getmyeventbookings);
 
 
 
@@ -155,7 +160,7 @@ app.post('/api/addmovies', upload.single('poster_url'), async (req, res) => {
 
 app.post('/api/addevent', upload1.single('poster_url'), async (req, res) => {
     try {
-        const { userId, event_name, event_type, location, event_date, event_time, ticket_price, organizer, description, ticket_availability, seat_arrangement, image_url, rows, cols } = req.body;
+        const { userId, event_name, event_type, location, event_date, event_time, ticket_price, description, ticket_availability, seat_arrangement, image_url, rows, cols } = req.body;
         const filename = req.file ? req.file.path : '';
         const poster_url = path.basename(filename);
         console.log(req.body);
@@ -168,7 +173,6 @@ app.post('/api/addevent', upload1.single('poster_url'), async (req, res) => {
             event_date,
             event_time,
             ticket_price,
-            organizer,
             description,
             ticket_availability,
             seat_arrangement,

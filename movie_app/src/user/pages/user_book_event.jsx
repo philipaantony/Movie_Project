@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import UserNavBar from "../usernavbar/usernavbar";
 import Footer from "../../footer/footer";
@@ -11,6 +11,7 @@ function UserBookEvents() {
   const userId = localStorage.getItem("userId");
   const myorientation = location.state.seat_arrangement;
   const rows = location.state.rows;
+  const event_id = location.state.event_id;
   const columns = location.state.cols;
   const seatPrice = location.state.ticket_price;
 
@@ -18,16 +19,38 @@ function UserBookEvents() {
   const [ticketQuantity, setTicketQuantity] = useState(1);
 
   const [selectedSeats, setSelectedSeats] = useState([]);
-  const [bookedSeats, setBookedSeats] = useState("");
+  const [bookedseats, setbookedseats] = useState("");
+  
+  useEffect(() => {
+  const mydata = {
+    event_id: event_id,
+  };
+  axios
+    .get(`${baseUrl}/api/fetcheventseats`, {
+      params: mydata,
+    })
+    .then((response) => {
+      console.log("Response:", response.data); // Log the response data
+      if (response.data) {
+        setbookedseats(response.data.BookedSeats);
+        console.log("Booked Seats:", response.data.BookedSeats); // Log the booked seats
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+}, [selectedSeats]);
+
   const [totalPrice, settotalPrice] = useState(seatPrice);
   const totalPrice2 = selectedSeats.length * seatPrice;
+ 
 
   const alphabet = Array.from({ length: 26 }, (_, i) =>
     String.fromCharCode(65 + i)
   );
 
   const unavailable = myorientation ? myorientation.split(",") : [];
-  const myBooking = bookedSeats ? bookedSeats.split(",") : [];
+  const myBooking = bookedseats ? bookedseats.split(",") : [];
 
   const isBooked = (seatNumber) => myBooking.includes(seatNumber);
 
@@ -139,10 +162,45 @@ function UserBookEvents() {
   }
 
   const bookmyevent = (orderId, paymentId, amount) => {
-    console.log(orderId);
-    console.log(paymentId);
-    console.log(amount);
-  };
+    // Handling selectedSeats
+    let seats = selectedSeats.length > 0 ? selectedSeats : "";
+
+    // Handling ticketQuantity
+    let quantity = selectedSeats.length > 0 ? 0 : ticketQuantity;
+
+    const data = {
+        userId: userId,
+        event_id: event_id,
+        selectedSeats: seats,
+        ticketQuantity: quantity,
+        amount: amount,
+        paymentId: paymentId,
+        orderId: orderId
+    };
+
+    axios
+        .post(`${baseUrl}/api/eventbookings`, data)
+        .then((response) => {
+            console.log("Booking successful:", response.data);
+
+            console.log("useState:", response.data.BookedSeats);
+            if (response.data.status === true) {
+                alert("Booking successful! Your seats have been reserved.");
+                setSelectedSeats([]);
+            }
+            else {
+                alert("Booking failed. Contact Admin.");
+            }
+            console.log(bookedseats);
+        })
+        .catch((error) => {
+            console.error("Booking failed:", error);
+        });
+}
+
+
+
+
 
   return (
     <div>

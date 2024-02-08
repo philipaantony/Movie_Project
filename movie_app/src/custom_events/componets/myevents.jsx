@@ -80,9 +80,7 @@ function AdminViewPostedMovies() {
                     <p className="card-text">
                       <strong>Location:</strong> {event.location}
                     </p>
-                    <p className="card-text">
-                      <strong>Hosted By:</strong> {event.organizer}
-                    </p>
+                
                     <p className="card-text">
                       <strong>Ticket Availability:</strong> {event.ticket_availability === 0 ? "Not Available" : event.ticket_availability}
                     </p>

@@ -52,6 +52,8 @@ import AddShortFilmPage from "./custom_events/pages/add-shortfilmpage";
 import AdminViewHostPage from "./admin/pages/admin_view_host_page";
 import ViewMyEvents from "./user/pages/viewmyevents";
 import UserBookEvents from "./user/pages/user_book_event";
+import MyEventTickets from "./user/pages/user_view_myticket_events";
+import MyticketEvent from "./user/pages/myticket-event";
 
 export default function App() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -74,7 +76,12 @@ export default function App() {
               <Route path="/changepassword" element={<UserChangePassword />} />
               <Route path="/editmyprofile" element={<UserEditProfile />} />
               <Route path="/myticket" element={<Myticket />} />
+
+              <Route path="/my-event-ticket" element={<MyticketEvent />} />
+
+
               <Route path="/mybookings" element={<UserViewMyTickets />} />
+              <Route path="/mybookings-events" element={<MyEventTickets />} />
               <Route path="/favmovies" element={<UserViewFavMovies />} />
               <Route path="/userhome" element={<UserHomePage2 />} />
               <Route path="/selectseat" element={<UserSelectSeat />} />

@@ -48,7 +48,7 @@ function AddNewEvent() {
     formData.append("event_date", data.event_date);
     formData.append("event_time", data.event_time);
     formData.append("ticket_price", data.ticket_price);
-    formData.append("organizer", data.organizer);
+ 
     formData.append("description", data.description);
     formData.append("rows", rows);
     formData.append("cols", columns);
@@ -116,9 +116,7 @@ function AddNewEvent() {
     ticket_availability: {
       required: "Ticket availability is required",
     },
-    organizer: {
-      required: "Organizer is required",
-    },
+   
     description: {
       required: "Description is required",
     },
@@ -338,25 +336,7 @@ function AddNewEvent() {
                               )}
                             </div>
 
-                            <div class="col-md-6 col-12">
-                              <div class="form-group">
-                                <label>organizer</label>
-                                <input
-                                  type="text"
-                                  className="form-control"
-                                  name="organizer"
-                                  {...register(
-                                    "organizer",
-                                    validationRules.organizer
-                                  )}
-                                  placeholder="organizer"
-                                />
-                                <p className="text-danger">
-                                  {errors?.organizer &&
-                                    errors.organizer.message}
-                                </p>{" "}
-                              </div>
-                            </div>
+                           
                             <div class="col-md-6 col-12">
                               <div class="form-group">
                                 <label>Description</label>{" "}

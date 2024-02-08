@@ -10,6 +10,7 @@ function ViewMyEvents() {
 
   // Extract event details from location.state
   const {
+    event_id,
     event_name,
     event_type,
     eventlocation,
@@ -81,6 +82,7 @@ function ViewMyEvents() {
                   
                   onClick={() => {
                     const data = {
+                      event_id,
                       ticket_availability,
                       ticket_price,
                     };
@@ -94,6 +96,7 @@ function ViewMyEvents() {
                     className="btn btn-danger mt-3"
                     onClick={() => {
                       const data = {
+                        event_id,
                         ticket_availability,
                         ticket_price,
                         rows,
