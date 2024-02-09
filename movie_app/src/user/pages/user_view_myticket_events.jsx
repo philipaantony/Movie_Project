@@ -90,7 +90,7 @@ function UserViewMyTickets() {
                               <strong>Organizer: {ticket.organizer}</strong><br />
                               <strong>Location: {ticket.location}</strong><br />
                               <strong>Event starts at: {ticket.eventStartsAt}</strong><br />
-                              <strong>Booking Date:</strong> {new Date(ticket.bookingDate).toLocaleDateString()}<br />
+                              <strong>Show Date:</strong> {new Date(ticket.bookingDate).toLocaleDateString()}<br />
                             </td>
                             <td rowSpan={selectedSeats.length}>
                               <strong>Booking Status:</strong> {ticket.status}<br />

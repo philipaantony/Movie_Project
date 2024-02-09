@@ -41,6 +41,28 @@ function UserBookEvents() {
     });
 }, [selectedSeats]);
 
+const [ticketAvailability, setTicketAvailability] = useState(null);
+
+useEffect(() => {
+  const fetchTicketAvailability = () => {
+      axios.get(`${baseUrl}/api/ticket_availability/${event_id}`)
+          .then(response => {
+               console.log(response.data.count)
+              setTicketAvailability(response.data.count);
+          })
+          .catch(error => {
+              console.error('Error fetching ticket availability:', error);
+          });
+  };
+
+  fetchTicketAvailability();
+
+  // Cleanup function (optional)
+  return () => {
+      // Any cleanup code if needed
+  };
+}, [selectedSeats]);
+
   const [totalPrice, settotalPrice] = useState(seatPrice);
   const totalPrice2 = selectedSeats.length * seatPrice;
  
@@ -330,38 +352,46 @@ function UserBookEvents() {
         </>
       ) : (
         <>
-          <GoBackButton />
+    <GoBackButton />
 
-          <div className="card text-center">
-            <div className="card-body">
-              <h5 className="card-title">Event Ticket Booking</h5>
-              <div className="d-flex justify-content-center align-items-center mb-3">
+    <div className="card text-center">
+        <div className="card-body">
+            <h5 className="card-title">Event Ticket Booking</h5>
+            <div className="d-flex justify-content-center align-items-center mb-3">
                 <button className="btn btn-danger" onClick={handleDecrease}>
-                  -
+                    -
                 </button>
                 <span className="quantity mx-3">{ticketQuantity}</span>
                 <button className="btn btn-danger" onClick={handleIncrease}>
-                  +
+                    +
                 </button>
-              </div>
-              <p className="card-text">
+            </div>
+            <p className="card-text">
                 <strong>Total Tickets:</strong> {ticketQuantity}
                 <br />
                 <strong>Total Amount:</strong> {totalPrice}
-              </p>
-              <p className="card-text">
-                By booking tickets, you agree to our{" "}
-                <a href="">Privacy Policy</a>.
-              </p>
-              <button
-                className="btn btn-primary"
-                onClick={() => displayRazorpay(totalPrice)}
-              >
-                Proceed to Payment
-              </button>
-            </div>
-          </div>
-        </>
+            </p>
+            {ticketAvailability !== null && ticketQuantity > ticketAvailability ? (
+                <p>All tickets are sold out. Sorry for the inconvenience.</p>
+            ) : (
+                <>
+                    <p>Tickets available: {ticketAvailability}</p>
+                    <p className="card-text">
+                        By booking tickets, you agree to our <a href="">Privacy Policy</a>.
+                    </p>
+                    {ticketAvailability !== null && ticketAvailability > 0 ? (
+                        <button className="btn btn-primary" onClick={() => displayRazorpay(totalPrice)}>
+                            Proceed to Payment
+                        </button>
+                    ) : (
+                        <p>No tickets available for booking.</p>
+                    )}
+                </>
+            )}
+        </div>
+    </div>
+</>
+
       )}
       <Footer />
     </div>

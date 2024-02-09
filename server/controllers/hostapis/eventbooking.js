@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Booking = require('../../model/eventbooking'); // Import your Mongoose EventBooking model
+const TicketCount = require('./../../model/ticketcount');
 
 // Define a route for booking an event
 router.post('', async (req, res) => {
@@ -17,7 +18,6 @@ router.post('', async (req, res) => {
         } = req.body;
 
         const paymentTime = new Date();
-        // Create an array of promises for each seat booking
 
         if (selectedSeats !== "") {
             const bookingPromises = selectedSeats.map(async (seat) => {
@@ -42,8 +42,7 @@ router.post('', async (req, res) => {
             const savedSelectedSeats = await Promise.all(bookingPromises);
             const selectedSeatsString = savedSelectedSeats.join(',');
             res.status(201).json({ "BookedSeats": selectedSeatsString, status: true });
-        }
-        else {
+        } else {
             const newBooking = new Booking({
                 userId: userId,
                 eventId: event_id,
@@ -58,9 +57,13 @@ router.post('', async (req, res) => {
 
             // Save the booking object to the database
             const savedBooking = await newBooking.save();
+
+            // Reduce the ticket count in TicketCount model
+            await TicketCount.findOneAndUpdate({ eventId: event_id }, { $inc: { ticket_availability: -ticketQuantity } }
+            );
+
             res.status(201).json({ "BookedSeats": '', status: true });
         }
-
     } catch (error) {
         console.error("Error creating booking:", error);
         res.status(500).json({ error: 'An error occurred while creating the booking' });

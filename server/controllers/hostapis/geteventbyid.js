@@ -9,7 +9,7 @@ router.get('/:userId', async (req, res) => {
     const userId = req.params.userId;
 
     try {
-        const events = await Event.find({ userId }); // Filter events by userId
+        const events = await Event.find({ userId }).sort({ event_date: -1 }); // Filter events by userId
         res.json(events);
     } catch (error) {
         console.error('Error fetching events:', error);

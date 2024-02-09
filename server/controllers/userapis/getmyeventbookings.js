@@ -10,7 +10,7 @@ router.get('/:userId', async (req, res) => {
 
     try {
         // Find all bookings for the given userId and populate associated event details
-        const bookings = await Booking.find({ userId }).populate('eventId');
+        const bookings = await Booking.find({ userId }).populate('eventId').sort({ createdAt: -1 });
         console.log(bookings);
 
         // If you want to append additional details like organizer, location, event starts at, booking date, and poster url

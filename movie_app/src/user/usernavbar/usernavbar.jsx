@@ -17,8 +17,6 @@ function UserNavBar(props)
   const username = localStorage.getItem("name");
   const useremail = localStorage.getItem("email");
   const profilepicture = localStorage.getItem("profilepicture");
-  console.log(username);
-  console.log(useremail);
   //const useremail = useSelector((state) => state.user.useremail);
   const navigate = useNavigate();
 

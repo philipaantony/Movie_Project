@@ -66,8 +66,8 @@ function AdminViewHost() {
             <tr>
               <th>Host Name</th>
               <th>Host Email</th>
-              <th>Phone</th>
               <td>Status</td>
+              <th>Phone</th>
               <th>Actions</th>
             </tr>
           </thead>

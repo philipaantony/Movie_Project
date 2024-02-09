@@ -17,6 +17,7 @@ const Movies = require('../server/model/moviemodel');
 const Login = require("./model/loginmodel");
 const Event = require('./model/eventmodel');
 const Theater = require("./model/theatermodel");
+const TicketCountModel = require("./model/ticketcount");
 
 
 app.use(cors());
@@ -63,6 +64,7 @@ const geteventbyid = require('./controllers/hostapis/geteventbyid');
 const eventbooking = require('./controllers/hostapis/eventbooking');
 const geteventseats = require('./controllers/hostapis/geteventbookedseats');
 const getmyeventbookings = require('./controllers/userapis/getmyeventbookings');
+const getcount = require('./controllers/userapis/get-count');
 
 
 app.use("/api/hostreg", hostreg);
@@ -72,6 +74,7 @@ app.use('/api/geteventbyid', geteventbyid);
 app.use('/api/eventbookings', eventbooking);
 app.use('/api/fetcheventseats', geteventseats);
 app.use('/api/getmyeventbooking', getmyeventbookings);
+app.use('/api/ticket_availability', getcount);
 
 
 
@@ -184,6 +187,11 @@ app.post('/api/addevent', upload1.single('poster_url'), async (req, res) => {
 
         // Save the event to the database
         const savedEvent = await newEvent.save();
+        const count = new TicketCountModel({
+            eventId: savedEvent._id,
+            ticket_availability
+        })
+        const savedCount = await count.save();
 
         // Respond with a success message and the saved event details
         res.json({ message: "Event Added Successfully", event: savedEvent });
