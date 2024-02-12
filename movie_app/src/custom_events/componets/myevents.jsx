@@ -3,8 +3,10 @@ import axios from "axios";
 import { baseUrl } from "../../config/config";
 import GoBackButton from "../../public/gobackButton";
 import Viewscreenorientation from "../../theater/componets/viewscreenorientation";
+import { useNavigate } from "react-router-dom";
 
 function AdminViewPostedMovies() {
+  const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const userid = localStorage.getItem("userId");
@@ -124,7 +126,12 @@ function AdminViewPostedMovies() {
                 </div>
                 <div className="row">
                   <div className="col align-self-start">
-                    //
+                  <button type="button" onClick={()=>{
+
+    
+                    navigate('/updateevents',{state:event})
+                    
+                    }} className="btn btn-primary block">Update </button>
                   </div>
                 </div>
               </div>

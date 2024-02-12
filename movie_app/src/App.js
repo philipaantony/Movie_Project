@@ -54,6 +54,7 @@ import ViewMyEvents from "./user/pages/viewmyevents";
 import UserBookEvents from "./user/pages/user_book_event";
 import MyEventTickets from "./user/pages/user_view_myticket_events";
 import MyticketEvent from "./user/pages/myticket-event";
+import UpdateEventPage from "./custom_events/pages/update-eventpage";
 
 export default function App() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -144,6 +145,8 @@ export default function App() {
               <Route path="/mystreams" element={<MyStreamsPage />} />
               <Route path="/addnewevent" element={< AddnewEventPage />} />
               <Route path="/addshortfilm" element={<AddShortFilmPage />} />
+              <Route path="/updateevents" element={<UpdateEventPage />} />
+
             </>
           ) : (<>
 

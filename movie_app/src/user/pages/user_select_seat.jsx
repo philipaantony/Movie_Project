@@ -272,7 +272,7 @@ function UserSelectSeat() {
                 </div>
                 <div className="col">
                   <p className="card-text">
-                    <strong>Release Date:</strong> {movieData.release_date}
+                    <strong>Release Date:</strong>  {new Date(movieData.release_date).toLocaleDateString("en-US")}
                   </p>
                   <p className="card-text">
                     <strong>Director:</strong> {movieData.director}

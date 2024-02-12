@@ -1,10 +1,18 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
+import { baseUrl } from "../../config/config";
 
-function AddNewEvent() {
+function UpdateEvent() {
   const userId = localStorage.getItem("userId");
-  const [isChecked, setIsChecked] = useState(false);
+  const location = useLocation();
+  const event = location.state;
+  const eventId = location.state._id;
+  const [isChecked, setIsChecked] = useState(
+    location.state.ticket_availability === 0
+  );
+
   const handleCheckboxChange = () => {
     setIsChecked(!isChecked);
   };
@@ -12,9 +20,11 @@ function AddNewEvent() {
     String.fromCharCode(65 + i)
   );
 
-  const [rows, setRows] = useState("5");
-  const [columns, setColumns] = useState("10");
-  const [unavailableseats, setunavailableseats] = useState([]);
+  const [rows, setRows] = useState(location.state.rows);
+  const [columns, setColumns] = useState(location.state.cols);
+  const [unavailableseats, setunavailableseats] = useState(
+    location.state.seat_arrangement
+  );
   const [selectedSeats, setSelectedSeats] = useState([]);
 
   const handleClick = (seatNumber) => {
@@ -37,7 +47,7 @@ function AddNewEvent() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
+  } = useForm({ defaultValues: event });
 
   const onSubmit = (data) => {
     const formData = new FormData();
@@ -48,7 +58,7 @@ function AddNewEvent() {
     formData.append("event_date", data.event_date);
     formData.append("event_time", data.event_time);
     formData.append("ticket_price", data.ticket_price);
- 
+
     formData.append("description", data.description);
     formData.append("rows", rows);
     formData.append("cols", columns);
@@ -67,28 +77,22 @@ function AddNewEvent() {
       console.log("Image URL:", imageUrl);
     }
 
-    if (!formData.get("poster_url")) {
-      alert("Poster URL is required");
-      return; // Stop execution if poster_url is empty
-    } else {
-      for (var pair of formData.entries()) {
-        console.log(pair[0] + ", " + pair[1]);
-      }
+    axios.patch(`${baseUrl}/api/updateevent/${eventId}`, formData)
+    .then(response => {
+      // Handle successful response
+      alert(response.data.message);
+      // Do something with the updated event data, such as displaying a success message
+    })
+    .catch(error => {
+      // Handle error
+      console.error('Error updating event:', error);
+      // Handle the case where the update failed, such as displaying an error message
+    });
+
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ": " + pair[1]);
     }
-
-    axios
-      .post("http://localhost:5000/api/addevent", formData)
-      .then((response) => {
-        console.log("Success:", response.data); // Use response.data.message if available
-        alert(response.data.message);
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-        alert("Error");
-      });
   };
-
-  //console.log(errors);
 
   const validationRules = {
     event_name: {
@@ -104,19 +108,19 @@ function AddNewEvent() {
     location: {
       required: "Location is required",
     },
-    event_date: {
+    event_date_new: {
       required: "Event date is required",
       validate: {
         futureDate: (value) => {
           const selectedDate = new Date(value);
           const currentDate = new Date();
-          
+
           if (selectedDate < currentDate) {
             return "Event date should not be in the past";
           }
           return true;
-        }
-      }
+        },
+      },
     },
     event_time: {
       required: "Event Time is required",
@@ -135,8 +139,8 @@ function AddNewEvent() {
             return "Ticket price must be less than or equal to 2500";
           }
           return true;
-        }
-      }
+        },
+      },
     },
     ticket_availability: {
       required: "Ticket availability is required",
@@ -152,10 +156,10 @@ function AddNewEvent() {
             return "Ticket count must be less than 10,000";
           }
           return true;
-        }
-      }
+        },
+      },
     },
-   
+
     description: {
       required: "Description is required",
     },
@@ -188,7 +192,7 @@ function AddNewEvent() {
         </header>
         <div className="page-heading">
           <div>
-            <h3>Host New Event</h3>
+            <h3>Update Event</h3>
           </div>
         </div>
         <div className="page-content">
@@ -197,9 +201,7 @@ function AddNewEvent() {
               <div className="col-12">
                 <div className="card">
                   <div className="card-header">
-                    <h4 className="card-eventname">
-                      Add new Event using below form
-                    </h4>
+                    <h4 className="card-eventname">Update my event</h4>
                   </div>
                   <div className="card-content">
                     <div className="card-body">
@@ -288,11 +290,16 @@ function AddNewEvent() {
                                 <label>Event Date</label>
                                 <input
                                   type="date"
+                                  defaultValue={
+                                    new Date(location.state.event_date)
+                                      .toISOString()
+                                      .split("T")[0]
+                                  }
                                   className="form-control"
-                                  name="event_date"
+                                  name="event_date_new"
                                   {...register(
-                                    "event_date",
-                                    validationRules.event_date
+                                    "event_date_new",
+                                    validationRules.event_date_new
                                   )}
                                 />
                                 <p className="text-danger">
@@ -375,7 +382,6 @@ function AddNewEvent() {
                               )}
                             </div>
 
-                           
                             <div class="col-md-6 col-12">
                               <div class="form-group">
                                 <label>Description</label>{" "}
@@ -395,21 +401,41 @@ function AddNewEvent() {
                               </div>
                             </div>
 
-                            <div class="col-md-6 col-12">
-                              <div class="form-group">
-                                <label>Poster URL</label>{" "}
-                                <input
-                                  type="file"
-                                  className="form-control"
-                                  name="poster_url"
-                                  onChange={(e) => setFile(e.target.files[0])}
-                                />
-                                <p className="text-danger">
-                                  {errors?.poster_url &&
-                                    errors.poster_url.message}
-                                </p>
+                            <div className="col-md-6 col-12">
+                              <div className="form-group row align-items-center">
+                                <label className="col-sm-4 col-form-label">
+                                  Poster URL
+                                </label>
+                                <div className="col-sm-8 d-flex align-items-center">
+                                  <img
+                                    style={{
+                                      height: "70px",
+                                      width: "70px",
+                                      marginRight: "10px", // Add margin between image and file input
+                                    }}
+                                    src={`${baseUrl}/event_poster/${location.state.poster_url}`}
+                                    alt="Poster"
+                                  />
+                                  <div className="flex-grow-1">
+                                    {" "}
+                                    {/* Use flex-grow-1 to fill remaining space */}
+                                    <input
+                                      type="file"
+                                      className="form-control"
+                                      name="poster_url"
+                                      onChange={(e) =>
+                                        setFile(e.target.files[0])
+                                      }
+                                    />
+                                    <p className="text-danger">
+                                      {errors?.poster_url &&
+                                        errors.poster_url.message}
+                                    </p>
+                                  </div>
+                                </div>
                               </div>
                             </div>
+
                             <div class="col-md-6 col-12">
                               <div class="form-group"></div>
 
@@ -607,4 +633,4 @@ function AddNewEvent() {
   );
 }
 
-export default AddNewEvent;
+export default UpdateEvent;
