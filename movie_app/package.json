@@ -41,6 +41,7 @@
     "react-responsive-carousel": "^3.2.23",
     "react-scripts": "^5.0.1",
     "react-to-pdf": "^1.0.1",
+    "react-youtube": "^10.1.0",
     "util": "^0.12.5",
     "web-vitals": "^2.1.4"
   },

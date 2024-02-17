@@ -9,13 +9,23 @@ import { setMovie } from "../../Redux/movie/movieSlice";
 import { baseUrl } from "../../config/config";
 import Footer from "../../footer/footer";
 import { toast, Toaster } from 'react-hot-toast';
+import YouTube from 'react-youtube';
 
 function UserViewMovie() {
+  
   const location = useLocation();
   const movie_id = location.state.movie_id;
   const dispatch = useDispatch();
   const releaseDate = new Date(location.state.release_date).toLocaleDateString();
 
+
+  const opts = {
+    height: '390',
+    width: '640',
+    playerVars: {
+      autoplay: 1,
+    },
+  };
   
   const movieData = location.state;
   dispatch(setMovie(movieData));
@@ -48,6 +58,7 @@ function UserViewMovie() {
       <div><Toaster/></div>
       <div className="container my-5">
         <div className="row">
+          
           <div className="col-md-4">
             <Maincard 
             
@@ -126,6 +137,10 @@ function UserViewMovie() {
               </button>
             </div>
           </div>
+          <div>
+     
+      <YouTube videoId={"L0yEMl8PXnw"} opts={opts} />
+    </div>
         </div>
       </div>
       <Footer />

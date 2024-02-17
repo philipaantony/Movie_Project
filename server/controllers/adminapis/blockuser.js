@@ -43,28 +43,30 @@ const sendBlockEmail = async (toEmail, reason) => {
 
 router.post('/:id', async (req, res) => {
     try {
-
         const id = req.params.id; // Get the _id from the route parameter
-        const { email, status, reason } = req.body;
+        const { status, reason } = req.body;
         console.log(req.body);
-        console.log(status);
+        console.log(id);
+
+        // Update the user status in the database
         const user = await Login.findByIdAndUpdate(id, { status: status });
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
-        }
-        else {
+        } else {
             if (status === 'blocked') {
-                console.log("here")
-                //const emailsend = await sendBlockEmail(email, reason);
+                // Perform actions specific to blocked users (e.g., sending emails)
+                console.log("User blocked:", user.email);
+                // Uncomment below if you want to send an email
+                // const emailsend = await sendBlockEmail(user.email, reason);
             }
             return res.status(200).json({ message: 'Status Updated' });
         }
-
     } catch (error) {
         console.error('Error blocking user:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 });
+
 
 module.exports = router;

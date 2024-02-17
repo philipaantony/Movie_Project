@@ -36,6 +36,21 @@ function ViewMyEvents() {
       year: "numeric",
     });
 
+    const eventTimeParts = event_time.split(":");
+let hour = parseInt(eventTimeParts[0]);
+const minute = eventTimeParts[1];
+let period = "AM";
+
+if (hour >= 12) {
+  period = "PM";
+  if (hour > 12) {
+    hour -= 12;
+  }
+}
+
+const formattedTime = `${hour}:${minute} ${period}`;
+    
+
   return (
     <div>
       <UserNavBar activehome="active" />
@@ -63,7 +78,7 @@ function ViewMyEvents() {
                   <strong>
                     <i class="bi bi-clock-history"></i>
                   </strong>{" "}
-                  {event_time} <i className="far fa-clock"></i>
+                  {formattedTime} <i className="far fa-clock"></i>
                   <br />
                   <strong>Ticket Price:</strong> {ticket_price}{" "}
                   <i className="fas fa-dollar-sign"></i>
