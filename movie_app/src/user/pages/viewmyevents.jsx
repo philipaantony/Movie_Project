@@ -25,6 +25,9 @@ function ViewMyEvents() {
     status,
     rows,
     cols,
+    hostname,
+    contactNumber,
+    hostemail
   } = location.state || {};
 
   // Format date to DDMMYYYY
@@ -89,8 +92,15 @@ const formattedTime = `${hour}:${minute} ${period}`;
                   <strong>Description:</strong> {description}
                 </p>
                 <p className="mt-3">
-                  <strong>Organizer:</strong> {organizer}
+                  <strong>Organizer:</strong> {hostname}
                 </p>
+                <p className="mt-3">
+                  <strong>Contact Number:</strong> {contactNumber}
+                </p>
+                <p className="mt-3">
+                  <strong>Email us:</strong> {hostemail}
+                </p>
+
 
                 {seat_arrangement === "no" ? (
                   <button className="btn btn-danger mt-3"
@@ -129,11 +139,9 @@ const formattedTime = `${hour}:${minute} ${period}`;
                   <strong>Privacy Note:</strong> Your information is secure and
                   will not be shared with third parties.
                 </p>
-                <p>
-                  <strong>Terms and Conditions:</strong> Lorem ipsum dolor sit
-                  amet, consectetur adipiscing elit. Nulla consequat eros et
-                  justo rhoncus.
-                </p>
+                <p><strong>Terms and Conditions:</strong> By proceeding with your booking and utilizing 
+                the Rayzor Pay payment gateway, you agree to the following terms and conditions: 
+                All bookings are subject to availability and confirmation by the event organizers.</p>
               </div>
             </div>
           </div>

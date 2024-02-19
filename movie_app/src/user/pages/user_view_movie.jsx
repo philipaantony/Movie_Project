@@ -8,25 +8,17 @@ import { useDispatch } from "react-redux";
 import { setMovie } from "../../Redux/movie/movieSlice";
 import { baseUrl } from "../../config/config";
 import Footer from "../../footer/footer";
-import { toast, Toaster } from 'react-hot-toast';
-import YouTube from 'react-youtube';
+import { toast, Toaster } from "react-hot-toast";
+import YouTube from "react-youtube";
 
 function UserViewMovie() {
-  
   const location = useLocation();
   const movie_id = location.state.movie_id;
   const dispatch = useDispatch();
-  const releaseDate = new Date(location.state.release_date).toLocaleDateString();
+  const releaseDate = new Date(
+    location.state.release_date
+  ).toLocaleDateString();
 
-
-  const opts = {
-    height: '390',
-    width: '640',
-    playerVars: {
-      autoplay: 1,
-    },
-  };
-  
   const movieData = location.state;
   dispatch(setMovie(movieData));
   const navigate = useNavigate();
@@ -41,7 +33,7 @@ function UserViewMovie() {
         user_id: userId, // Replace with the actual user_id
         movie_id: movie_id,
       });
-      console.log(response.data.message)
+      console.log(response.data.message);
       if (response.status === 200) {
         toast.success(response.data.message);
       } else {
@@ -52,19 +44,21 @@ function UserViewMovie() {
     }
   };
 
+  
   return (
     <div>
       <UserNavBar activehome="active" />
-      <div><Toaster/></div>
+      <div>
+        <Toaster />
+      </div>
       <div className="container my-5">
         <div className="row">
-          
           <div className="col-md-4">
-            <Maincard 
-            
-            duration={location.state.duration}
-            title={location.state.title} 
-            url={location.state.poster_url} />
+            <Maincard
+              duration={location.state.duration}
+              title={location.state.title}
+              url={location.state.poster_url}
+            />
           </div>
           <div className="col-md-8">
             <br></br>
@@ -138,9 +132,18 @@ function UserViewMovie() {
             </div>
           </div>
           <div>
-     
-      <YouTube videoId={"L0yEMl8PXnw"} opts={opts} />
-    </div>
+            <YouTube
+              videoId={location.state.trailer_url}
+              opts={{
+                height: "390",
+                width: "640",
+                playerVars: {
+                  autoplay: 1,
+                  mute:1
+                },
+              }}
+            />
+          </div>
         </div>
       </div>
       <Footer />

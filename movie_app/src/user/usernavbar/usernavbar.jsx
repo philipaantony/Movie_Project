@@ -124,7 +124,7 @@ function UserNavBar(props)
                   <Dropdown.Item style={{ color: "green" }}>
               
                   <div  id="mybooking"><Link to="/mybookings">
-                    <MovieIcon /> Booked Movies
+                    <MovieIcon /> My Bookings
                     </Link>
                     </div>
                   </Dropdown.Item>

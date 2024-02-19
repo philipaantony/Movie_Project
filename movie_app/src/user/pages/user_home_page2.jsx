@@ -244,6 +244,7 @@ function UserHomePage2() {
                         cast: movie.cast,
                         trailer_url: movie.trailer_url,
                         StreamingType: movie.StreamingType,
+                        trailer_url:movie. trailer_url
                       };
 
                       return (
@@ -509,6 +510,9 @@ function UserHomePage2() {
           status: eventData.status,
           rows: eventData.rows,
           cols: eventData.cols,
+          hostname:eventData.userId.hostname,
+          contactNumber:eventData.userId.contactNumber,
+          hostemail:eventData.userId.email
         };
         if (eventData.event_name) {
           return (

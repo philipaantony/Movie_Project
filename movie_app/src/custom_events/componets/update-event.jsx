@@ -146,8 +146,8 @@ function UpdateEvent() {
       required: "Ticket availability is required",
       validate: {
         nonNegative: (value) => {
-          if (parseInt(value) < 0) {
-            return "Ticket count cannot be negative";
+          if (parseInt(value) < 5) {
+            return "Ticket count Ticket count must be greater than 5 ";
           }
           return true;
         },
