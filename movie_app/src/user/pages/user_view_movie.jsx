@@ -135,11 +135,12 @@ function UserViewMovie() {
             <YouTube
               videoId={location.state.trailer_url}
               opts={{
-                height: "390",
-                width: "640",
+                height: "490",
+                width: "740",
                 playerVars: {
-                  autoplay: 1,
-                  mute:1
+                  autoplay: 0,
+                  mute:1,
+                
                 },
               }}
             />
