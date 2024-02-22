@@ -50,7 +50,7 @@ function EventSidebar(props) {
               </div>
               <div className="ms-3 name">
                 <h5 className="font-bold">Event Panel</h5>
-                <h9 className="text-muted mb-0" style={{ fontSize: "13px" }}>
+                <h9 className="text-muted mb-0" style={{ fontSize: "12px" }}>
                   {useremail}{" "}
                 </h9>
                 <button

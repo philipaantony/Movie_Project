@@ -55,7 +55,7 @@ function UpdateEvent() {
     formData.append("event_name", data.event_name);
     formData.append("event_type", data.event_type);
     formData.append("location", data.location);
-    formData.append("event_date", data.event_date);
+    formData.append("event_date", data.event_date_new);
     formData.append("event_time", data.event_time);
     formData.append("ticket_price", data.ticket_price);
 

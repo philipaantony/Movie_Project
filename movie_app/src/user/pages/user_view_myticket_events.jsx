@@ -13,6 +13,8 @@ function UserViewMyTickets() {
   const [ticketDetails, setTicketDetails] = useState([]);
 
   const handleNavigation = (selectedTicket) => {
+
+    console.log(selectedTicket[1].seatNumber)
     const passingData = {
       title:selectedTicket[0].eventId.event_name,
       amount: selectedTicket[0].amount,
@@ -22,7 +24,8 @@ function UserViewMyTickets() {
       paymentTime: selectedTicket[0].paymentTime,
       posterUrl: selectedTicket[0].posterUrl,
       razorpayOrderId: selectedTicket[0].razorpayOrderId,
-      seatNumber: selectedTicket[0].seatNumber,
+      seatNumber: selectedTicket.map(ticket => ticket.seatNumber).join(', '),
+
       eventStartsAt: selectedTicket[0].eventStartsAt,
       status: selectedTicket[0].status,
       ticketCount: selectedTicket[0].ticketCount
@@ -71,6 +74,23 @@ function UserViewMyTickets() {
                     const isNewPaymentId = index === 0 || ticketDetails[index - 1].paymentId !== ticket.paymentId;
                     const selectedSeats = ticketDetails.filter(t => t.paymentId === ticket.paymentId);
 
+
+                    const eventTimeParts = ticket.eventStartsAt.split(":");
+                    let hour = parseInt(eventTimeParts[0]);
+                    const minute = eventTimeParts[1];
+                    let period = "AM";
+                    
+                    if (hour >= 12) {
+                      period = "PM";
+                      if (hour > 12) {
+                        hour -= 12;
+                      }
+                    }
+                    
+                    const formattedTime = `${hour}:${minute} ${period}`;
+
+
+
                     return (
                       <tr key={index}>
                         {isNewPaymentId && (
@@ -89,7 +109,7 @@ function UserViewMyTickets() {
                            
                               <strong>Organizer: {ticket.organizer}</strong><br />
                               <strong>Location: {ticket.location}</strong><br />
-                              <strong>Event starts at: {ticket.eventStartsAt}</strong><br />
+                              <strong>Event starts at: {formattedTime}</strong><br />
                               <strong>Show Date:</strong> {new Date(ticket.bookingDate).toLocaleDateString()}<br />
                             </td>
                             <td rowSpan={selectedSeats.length}>

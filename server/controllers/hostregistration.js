@@ -3,6 +3,53 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const Login = require('../model/loginmodel');
 const HostRegistration = require('../model/hostmodel');
+const nodemailer = require("nodemailer");
+require("dotenv").config();
+
+const emailUser = process.env.EMAIL_USER;
+const emailPassword = process.env.EMAIL_PASSWORD;
+const emailService = process.env.EMAIL_SERVICE;
+
+const transporter = nodemailer.createTransport({
+    service: emailService, // e.g., 'Gmail', 'Yahoo', etc.
+    auth: {
+        user: emailUser,
+        pass: emailPassword,
+    },
+});
+
+
+const sendBlockEmail = async (toEmail, userId) => {// Function to generate activation token
+    const activationLink = `http://localhost:5000/api/activate-user?id=${userId}`;
+
+    const mailOptions = {
+        from: emailUser,
+        to: toEmail,
+        subject: "Welcome to MovieVerse",
+        text: `Hello MovieVerse User,
+        
+        Welcome to MovieVerse! To activate your account, please click on the following link:
+        ${activationLink}
+        
+        Best regards,
+        The MovieVerse Team`,
+    };
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log("Welcome email sent successfully");
+        return true; // Return true to indicate success
+    } catch (error) {
+        console.error("Error sending welcome email:", error);
+        return false; // Return false to indicate failure
+    }
+};
+
+// Function to generate activation token (example implementation)
+function generateActivationToken() {
+    // Generate token logic here, for example:
+    return Math.random().toString(36).substr(2); // Example of a random alphanumeric token
+}
+
 
 router.post('', async (req, res) => {
     try {
@@ -21,13 +68,16 @@ router.post('', async (req, res) => {
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
+
+        const emailsend = await sendBlockEmail(email, savedHost._id);
+
         // Create a new login entry with the host's _id as the unique identifier
         const newLogin = new Login({
             _id: savedHost._id,
             email,
             password: hashedPassword,
             usertype: "host",
-            status: "blocked",
+            status: "Not-Verified",
         });
 
         // Save the login information

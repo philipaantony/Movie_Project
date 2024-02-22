@@ -255,6 +255,7 @@ function AddNewEvent() {
                                     Fashion Show
                                   </option>
                                   <option value="Workshop">Workshop</option>
+                                  <option value="Cultural Show">Cultural Show</option>
 
                                   {/* Add more event types here */}
                                 </select>

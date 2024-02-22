@@ -21,13 +21,11 @@ function AdminViewPostedMovies() {
           console.error('Error fetching events:', error);
         })
         .finally(() => {
-          
           setLoading(false);
         });
     }
   }, [userid]);
   
-
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -37,107 +35,105 @@ function AdminViewPostedMovies() {
       <div className="container mt-5">
         <h2>My Events</h2>
         <GoBackButton />
-        {events.map((event, index) => {
-          const eventdate = new Date(event.event_date).toLocaleDateString();
+        {events.length === 0 ? (
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title">No Events Hosted</h5>
+              <p className="card-text">You have not hosted any events yet.</p>
+            </div>
+          </div>
+        ) : (
+          events.map((event, index) => {
+            const eventdate = new Date(event.event_date).toLocaleDateString();
 
-          return (
-            <div className="card mb-3" key={index}>
-              <div className="row g-0">
-                <div className="col-md-8">
-                  <div className="card-body">
-                  <span
-  className={`badge ${new Date(eventdate) < new Date() ? 'bg-danger' : 'bg-warning'}`}
-  style={{ position: "absolute", top: "10px", right: "10px", fontSize: "14px" }}
->
-  {new Date(eventdate) < new Date() ? 'Expired' : 'Coming soon'}
-</span>
-
-
-                    <h2 className="card-title">{event.event_name}</h2>
-                    <div className="row">
-                      <div className="col">
-                        <p className="card-text">
-                          <strong>Type:</strong> {event.event_type}
-                        </p>
-                        <p className="card-text">
-                          <strong>Price:</strong> ${event.ticket_price}
-                        </p>
-                      
-                      </div>
-                      <div className="col">
-                      <p className="card-text">
-  <strong>Date:</strong> {eventdate}
-  {new Date(eventdate) < new Date() ? (
-    <span className="text-danger"> (Event Expired)</span>
-  ) : null}
-</p>
-                        <p className="card-text">
-                          <strong>Time:</strong> {event.event_time}
-                        </p>
-                      </div>
-                    </div>
-                    <p className="card-text">
-                      <strong>Description:</strong> {event.description}
-                    </p>
-                    <p className="card-text">
-                      <strong>Location:</strong> {event.location}
-                    </p>
-                
-                    <p className="card-text">
-                      <strong>Ticket Availability:</strong> {event.ticket_availability === 0 ? "Not Available" : event.ticket_availability}
-                    </p>
-
-                    <p className="card-text">
-                      <strong>Seat Arrangement:</strong>{" "}
-                      {event.seat_arrangement === "no" ? "Arrangement Not Available" : event.seat_arrangement}
-                    </p>
-
-                    {event.seat_arrangement !== "no" && (
-                      <button
-                        type="button"
-                        className="btn btn-secondary"
-                        data-bs-toggle="modal"
-                        data-bs-target={`#seatArrangementModal${index}`}
-                        style={{ marginRight: "20px" }}
+            return (
+              <div className="card mb-3" key={index}>
+                <div className="row g-0">
+                  <div className="col-md-8">
+                    <div className="card-body">
+                      <span
+                        className={`badge ${new Date(eventdate) < new Date() ? 'bg-danger' : 'bg-warning'}`}
+                        style={{ position: "absolute", top: "10px", right: "10px", fontSize: "14px" }}
                       >
-                        View Seating Arrangement
-                      </button>
-                    )}
+                        {new Date(eventdate) < new Date() ? 'Expired' : 'Coming soon'}
+                      </span>
+                      <h2 className="card-title">{event.event_name}</h2>
+                      <div className="row">
+                        <div className="col">
+                          <p className="card-text">
+                            <strong>Type:</strong> {event.event_type}
+                          </p>
+                          <p className="card-text">
+                            <strong>Price:</strong> ${event.ticket_price}
+                          </p>
+                        </div>
+                        <div className="col">
+                          <p className="card-text">
+                            <strong>Date:</strong> {eventdate}
+                            {new Date(eventdate) < new Date() ? (
+                              <span className="text-danger"> (Event Expired)</span>
+                            ) : null}
+                          </p>
+                          <p className="card-text">
+                            <strong>Time:</strong> {event.event_time}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="card-text">
+                        <strong>Description:</strong> {event.description}
+                      </p>
+                      <p className="card-text">
+                        <strong>Location:</strong> {event.location}
+                      </p>
+                      <p className="card-text">
+                        <strong>Ticket Availability:</strong> {event.ticket_availability === 0 ? "Not Available" : event.ticket_availability}
+                      </p>
+                      <p className="card-text">
+                        <strong>Seat Arrangement:</strong>{" "}
+                        {event.seat_arrangement === "no" ? "Arrangement Not Available" : <button
+                          type="button"
+                          className="btn btn-outline-danger"
+                          data-bs-toggle="modal"
+                          data-bs-target={`#seatArrangementModal${index}`}
+                          style={{ marginRight: "20px" }}
+                        >
+                          View Arrangement
+                        </button>}
+                      </p>
+                     
+                    </div>
                   </div>
-                </div>
-                <div className="col-md-4">
-                  <img
-                    src={`${baseUrl}/event_poster/${event.poster_url}`}
-                    alt={event.event_name}
-                    style={{
-                      height: "290px",
-                      maxWidth: "200px",
-                      margin: "30px",
-                      borderRadius: "10px",
-                      transition: "transform 0.2s",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = "scale(1.14)";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = "scale(1)";
-                    }}
-                  />
-                </div>
-                <div className="row">
-                  <div className="col align-self-start">
-                  <button type="button" onClick={()=>{
-
-    
-                    navigate('/updateevents',{state:event})
-                    
-                    }} className="btn btn-primary block">Update </button>
+                  <div className="col-md-4">
+                    <img
+                      src={`${baseUrl}/event_poster/${event.poster_url}`}
+                      alt={event.event_name}
+                      style={{
+                        height: "290px",
+                        maxWidth: "200px",
+                        margin: "30px",
+                        borderRadius: "10px",
+                        transition: "transform 0.2s",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = "scale(1.14)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = "scale(1)";
+                      }}
+                    />
+                  </div>
+                  <div className="row">
+                    <div className="col align-self-start">
+                      <button type="button" onClick={() => {
+                        navigate('/updateevents', { state: event })
+                      }} className="btn btn-primary block">Update </button>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
 
       {/* Modal for Seating Arrangement */}
@@ -164,15 +160,12 @@ function AdminViewPostedMovies() {
                 ></button>
               </div>
               <div className="modal-body">
-                {/* Add your seating arrangement component here */}
-                {/* Example: <SeatingArrangementComponent event={event} /> */}
                 <Viewscreenorientation
-                title={"Event Seating Arrangement"}
-                        rows={event.rows}
-                        cols={event.cols}
-                        orientationProp={event.seat_arrangement}
-                      />
-
+                  title={"Event Seating Arrangement"}
+                  rows={event.rows}
+                  cols={event.cols}
+                  orientationProp={event.seat_arrangement}
+                />
               </div>
               <div className="modal-footer">
                 <button

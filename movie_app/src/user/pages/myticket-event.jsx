@@ -82,7 +82,9 @@ function MyticketEvent() {
                                     Location: {eventLocation} <br />
                                     Event Start Time: {eventStartsAt} <br />
                                     Booking Date: {bookingDateFormatted} <br />
-                                    Payment Status: <span style={{ color: 'green' }}>{status}</span>
+                                    Payment Status: <span style={{ color: 'green', fontWeight: 'bold' }}>{status}</span><br/>
+                                    Amount Paid: <span style={{  fontWeight: 'bold' }}>{amount}</span>
+
                                 </p>
                             </div>
                         </div>

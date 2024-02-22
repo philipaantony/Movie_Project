@@ -469,6 +469,27 @@ app.get("/api/getscreenbyid", async (req, res) => {
 
 //=======================================================================================
 
+
+app.get('/api/activate-user', async (req, res) => {
+    const id = req.query.id; // Access id from query parameters
+    console.log(req.query.id);
+    try {
+        const updatedUser = await Login.findByIdAndUpdate(id, { status: 'blocked' }, { new: true });
+        if (updatedUser) {
+            res.redirect('http://localhost:3000/');
+        } else {
+            res.status(404).json({ error: 'User not found' });
+        }
+    } catch (error) {
+        console.error('Error updating user status:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+
+
+
+
 app.listen(port, () => {
     console.log("server running on port 5000");
 });

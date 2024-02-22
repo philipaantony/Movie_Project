@@ -81,23 +81,28 @@ function AdminViewHost() {
       </td>
       <td>{host.contactNumber}</td>
       <td>
-        {host.status === 'blocked' ? (
-          <button
-            type="button"
-            className="btn btn-success"
-            onClick={() => ApproveHost(host._id, host.email, 'Authorized')}
-          >
-            Approve
-          </button>
-        ) : (
-          <button
-            type="button"
-            className="btn btn-danger"
-            onClick={() => ApproveHost(host._id, host.email, 'blocked')}
-          >
-            Block
-          </button>
-        )}
+      {host.status === 'blocked' ? (
+    <button
+        type="button"
+        className="btn btn-success"
+        onClick={() => ApproveHost(host._id, host.email, 'Authorized')}
+    >
+        Approve
+    </button>
+) : host.status === 'Not-Verified' ? (
+    <div>
+        User Not Verified
+    </div>
+) : (
+    <button
+        type="button"
+        className="btn btn-danger"
+        onClick={() => ApproveHost(host._id, host.email, 'blocked')}
+    >
+        Block
+    </button>
+)}
+
       </td>
     </tr>
   ))}
