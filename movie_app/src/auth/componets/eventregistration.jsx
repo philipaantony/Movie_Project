@@ -16,7 +16,7 @@ function EventRegistration() {
        console.log('Host Registered:', response.data);
        if(response.data.navigation===true)
        {
-       alert(response.data.message);
+         alert(response.data.message);
          navigate("/requestpending");
        }
        if(response.data.navigation===false)

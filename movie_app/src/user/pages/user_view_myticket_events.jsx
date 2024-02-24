@@ -14,7 +14,7 @@ function UserViewMyTickets() {
 
   const handleNavigation = (selectedTicket) => {
 
-    console.log(selectedTicket[1].seatNumber)
+    
     const passingData = {
       title:selectedTicket[0].eventId.event_name,
       amount: selectedTicket[0].amount,

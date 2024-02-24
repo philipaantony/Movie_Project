@@ -397,10 +397,14 @@ function UserSelectSeat() {
                  
               
                 <p>Buy Now!</p>
-                <button className="btn btn-danger" onClick={() => displayRazorpay(totalPrice)}>
-                    Pay ₹{totalPrice}
-                </button>
-         
+                <button 
+    className="btn btn-danger" 
+    onClick={() => displayRazorpay(totalPrice)}
+    disabled={totalPrice === 0}
+>
+    Pay ₹{totalPrice}
+</button>
+
 
 
                   <button

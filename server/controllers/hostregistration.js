@@ -85,7 +85,7 @@ router.post('', async (req, res) => {
 
         // Check if both host registration and login information are saved successfully
         if (savedHost && savedLogin) {
-            return res.status(201).json({ message: 'Registration Successful', savedHost, navigation: true });
+            return res.status(201).json({ message: 'Registration Successful. Please verify your email.', savedHost, navigation: true });
         }
     } catch (error) {
         if (error.code === 11000) {

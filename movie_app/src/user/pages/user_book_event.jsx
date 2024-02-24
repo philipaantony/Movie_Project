@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import UserNavBar from "../usernavbar/usernavbar";
 import Footer from "../../footer/footer";
@@ -20,52 +20,52 @@ function UserBookEvents() {
 
   const [selectedSeats, setSelectedSeats] = useState([]);
   const [bookedseats, setbookedseats] = useState("");
-  
+
   useEffect(() => {
-  const mydata = {
-    event_id: event_id,
-  };
-  axios
-    .get(`${baseUrl}/api/fetcheventseats`, {
-      params: mydata,
-    })
-    .then((response) => {
-      console.log("Response:", response.data); // Log the response data
-      if (response.data) {
-        setbookedseats(response.data.BookedSeats);
-        console.log("Booked Seats:", response.data.BookedSeats); // Log the booked seats
-      }
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-}, [selectedSeats]);
+    const mydata = {
+      event_id: event_id,
+    };
+    axios
+      .get(`${baseUrl}/api/fetcheventseats`, {
+        params: mydata,
+      })
+      .then((response) => {
+        console.log("Response:", response.data); // Log the response data
+        if (response.data) {
+          setbookedseats(response.data.BookedSeats);
+          console.log("Booked Seats:", response.data.BookedSeats); // Log the booked seats
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, [selectedSeats]);
 
-const [ticketAvailability, setTicketAvailability] = useState(null);
+  const [ticketAvailability, setTicketAvailability] = useState(null);
 
-useEffect(() => {
-  const fetchTicketAvailability = () => {
-      axios.get(`${baseUrl}/api/ticket_availability/${event_id}`)
-          .then(response => {
-               console.log(response.data.count)
-              setTicketAvailability(response.data.count);
-          })
-          .catch(error => {
-              console.error('Error fetching ticket availability:', error);
-          });
-  };
+  useEffect(() => {
+    const fetchTicketAvailability = () => {
+      axios
+        .get(`${baseUrl}/api/ticket_availability/${event_id}`)
+        .then((response) => {
+          console.log(response.data.count);
+          setTicketAvailability(response.data.count);
+        })
+        .catch((error) => {
+          console.error("Error fetching ticket availability:", error);
+        });
+    };
 
-  fetchTicketAvailability();
+    fetchTicketAvailability();
 
-  // Cleanup function (optional)
-  return () => {
+    // Cleanup function (optional)
+    return () => {
       // Any cleanup code if needed
-  };
-}, [selectedSeats]);
+    };
+  }, [selectedSeats]);
 
   const [totalPrice, settotalPrice] = useState(seatPrice);
   const totalPrice2 = selectedSeats.length * seatPrice;
- 
 
   const alphabet = Array.from({ length: 26 }, (_, i) =>
     String.fromCharCode(65 + i)
@@ -191,38 +191,33 @@ useEffect(() => {
     let quantity = selectedSeats.length > 0 ? 0 : ticketQuantity;
 
     const data = {
-        userId: userId,
-        event_id: event_id,
-        selectedSeats: seats,
-        ticketQuantity: quantity,
-        amount: amount,
-        paymentId: paymentId,
-        orderId: orderId
+      userId: userId,
+      event_id: event_id,
+      selectedSeats: seats,
+      ticketQuantity: quantity,
+      amount: amount,
+      paymentId: paymentId,
+      orderId: orderId,
     };
 
     axios
-        .post(`${baseUrl}/api/eventbookings`, data)
-        .then((response) => {
-            console.log("Booking successful:", response.data);
+      .post(`${baseUrl}/api/eventbookings`, data)
+      .then((response) => {
+        console.log("Booking successful:", response.data);
 
-            console.log("useState:", response.data.BookedSeats);
-            if (response.data.status === true) {
-                alert("Booking successful! Your seats have been reserved.");
-                setSelectedSeats([]);
-            }
-            else {
-                alert("Booking failed. Contact Admin.");
-            }
-            console.log(bookedseats);
-        })
-        .catch((error) => {
-            console.error("Booking failed:", error);
-        });
-}
-
-
-
-
+        console.log("useState:", response.data.BookedSeats);
+        if (response.data.status === true) {
+          alert("Booking successful! Your seats have been reserved.");
+          setSelectedSeats([]);
+        } else {
+          alert("Booking failed. Contact Admin.");
+        }
+        console.log(bookedseats);
+      })
+      .catch((error) => {
+        console.error("Booking failed:", error);
+      });
+  };
 
   return (
     <div>
@@ -331,9 +326,11 @@ useEffect(() => {
                       <button
                         className="btn btn-danger"
                         onClick={() => displayRazorpay(totalPrice2)}
+                        disabled={totalPrice2 === 0}
                       >
                         Pay ₹{totalPrice2}
                       </button>
+
                       <button
                         style={{ marginLeft: "20px" }}
                         className="btn btn-primary"
@@ -352,46 +349,50 @@ useEffect(() => {
         </>
       ) : (
         <>
-    <GoBackButton />
+          <GoBackButton />
 
-    <div className="card text-center">
-        <div className="card-body">
-            <h5 className="card-title">Event Ticket Booking</h5>
-            <div className="d-flex justify-content-center align-items-center mb-3">
+          <div className="card text-center">
+            <div className="card-body">
+              <h5 className="card-title">Event Ticket Booking</h5>
+              <div className="d-flex justify-content-center align-items-center mb-3">
                 <button className="btn btn-danger" onClick={handleDecrease}>
-                    -
+                  -
                 </button>
                 <span className="quantity mx-3">{ticketQuantity}</span>
                 <button className="btn btn-danger" onClick={handleIncrease}>
-                    +
+                  +
                 </button>
-            </div>
-            <p className="card-text">
+              </div>
+              <p className="card-text">
                 <strong>Total Tickets:</strong> {ticketQuantity}
                 <br />
                 <strong>Total Amount:</strong> {totalPrice}
-            </p>
-            {ticketAvailability !== null && ticketQuantity > ticketAvailability ? (
+              </p>
+              {ticketAvailability !== null &&
+              ticketQuantity > ticketAvailability ? (
                 <p>All tickets are sold out. Sorry for the inconvenience.</p>
-            ) : (
+              ) : (
                 <>
-                    <p>Tickets available: {ticketAvailability}</p>
-                    <p className="card-text">
-                        By booking tickets, you agree to our <a href="">Privacy Policy</a>.
-                    </p>
-                    {ticketAvailability !== null && ticketAvailability > 0 ? (
-                        <button className="btn btn-primary" onClick={() => displayRazorpay(totalPrice)}>
-                            Proceed to Payment
-                        </button>
-                    ) : (
-                        <p>No tickets available for booking.</p>
-                    )}
+                  <p>Tickets available: {ticketAvailability}</p>
+                  <p className="card-text">
+                    By booking tickets, you agree to our{" "}
+                    <a href="">Privacy Policy</a>.
+                  </p>
+                  {ticketAvailability !== null && ticketAvailability > 0 ? (
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => displayRazorpay(totalPrice)}
+                    >
+                      Proceed to Payment
+                    </button>
+                  ) : (
+                    <p>No tickets available for booking.</p>
+                  )}
                 </>
-            )}
-        </div>
-    </div>
-</>
-
+              )}
+            </div>
+          </div>
+        </>
       )}
       <Footer />
     </div>
