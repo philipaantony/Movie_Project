@@ -63,7 +63,11 @@ const eventbooking = require("./controllers/hostapis/eventbooking");
 const geteventseats = require("./controllers/hostapis/geteventbookedseats");
 const getmyeventbookings = require("./controllers/userapis/getmyeventbookings");
 const getcount = require("./controllers/userapis/get-count");
+const shortFilmRoutes = require("./controllers/hostapis/addfilm")
+const getuserfilmbyid = require('./controllers/hostapis/getfilmsbyuserid');
+const getfilms = require('./controllers/userapis/getallshortfilms')
 
+app.use("/api/getshortfilms", getuserfilmbyid);
 app.use("/api/hostreg", hostreg);
 app.use("/api/getallhost", getallhost);
 app.use("/api/getallevents", getallevents);
@@ -101,8 +105,11 @@ app.use("/api/fetchbookedseats", fetchbookedseats);
 app.use("/api/getfavmovies", favmovieslist);
 app.use("/api/getfavmovies", favmovieslist);
 app.use("/api/user", fetchmyprofile);
+app.use("/api/getshortfilms", getfilms);
 
 app.use("/api/statistics", bookingstatictis);
+
+app.use('/api', shortFilmRoutes);
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {

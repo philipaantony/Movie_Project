@@ -3,6 +3,8 @@ import axios from "axios";
 import UserNavBar from "../usernavbar/usernavbar";
 import { useNavigate } from "react-router-dom";
 import UserCarousel from "../componets/Carousel/user_carousel";
+import "./../componets/moviecards/sample.css";
+import ShortFilmCard from "../componets/Shortfimcard";
 
 function UserHomePage2() {
   const isLoggedInlocal = localStorage.getItem("isLoggedIn");
@@ -24,8 +26,7 @@ function UserHomePage2() {
         console.error("Error fetching movies:", error);
       });
 
-
-      axios
+    axios
       .get("http://localhost:5000/api/getallevents")
       .then((response) => {
         console.log(response.data);
@@ -34,10 +35,6 @@ function UserHomePage2() {
       .catch((error) => {
         console.error("Error fetching movies:", error);
       });
-
-
-
-
   }, []);
 
   const handleSearch = (event) => {
@@ -45,11 +42,12 @@ function UserHomePage2() {
     setSearchTerm(searchTerm);
 
     // Filter movies based on the search term
-    const filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    movie.genre.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    movie.language.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    const filteredMovies = movies.filter(
+      (movie) =>
+        movie.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        movie.genre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        movie.language.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     setFilteredMovies(filteredMovies);
   };
@@ -179,7 +177,7 @@ function UserHomePage2() {
                 <div className="col-md-8 mx-auto">
                   <div className="input-group">
                     <input
-                    id="serachmymovie"
+                      id="serachmymovie"
                       type="text"
                       className="form-control"
                       placeholder="Search for movies..."
@@ -213,7 +211,6 @@ function UserHomePage2() {
             </div>
           </div>
           {/*------------------------------------------------------------------------------ */}
-
           <div
             className="container-fluid"
             style={{ paddingLeft: "60px", paddingRight: "60px" }}
@@ -244,7 +241,7 @@ function UserHomePage2() {
                         cast: movie.cast,
                         trailer_url: movie.trailer_url,
                         StreamingType: movie.StreamingType,
-                        trailer_url:movie. trailer_url
+                        trailer_url: movie.trailer_url,
                       };
 
                       return (
@@ -310,12 +307,10 @@ function UserHomePage2() {
               </div>
             )}
           </div>
-
-
-
           <div
             className="container-fluid"
-            style={{ paddingLeft: "60px", paddingRight: "60px" }}>
+            style={{ paddingLeft: "60px", paddingRight: "60px" }}
+          >
             <section className="mt-5">
               <h2>Now In Theaters</h2>
               <div className="row">
@@ -397,7 +392,6 @@ function UserHomePage2() {
               </div>
             </section>
           </div>
-
           <div
             className="container-fluid"
             style={{ paddingLeft: "60px", paddingRight: "60px" }}
@@ -483,76 +477,74 @@ function UserHomePage2() {
               </div>
             </section>
           </div>
-
-
-
+          <ShortFilmCard />
           <div
-  className="container-fluid"
-  style={{ paddingLeft: "60px", paddingRight: "60px" }}
->
-  <section className="mt-5">
-    <h2>OutDoor Events</h2>
-    <div className="row">
-      {events.map((eventData) => {
-        const data = {
-          event_id: eventData._id,
-          event_name: eventData.event_name,
-          event_type: eventData.event_type,
-          eventlocation: eventData.location,
-          event_date: eventData.event_date,
-          event_time: eventData.event_time,
-          ticket_price: eventData.ticket_price,
-          organizer: eventData.organizer,
-          description: eventData.description,
-          ticket_availability: eventData.ticket_availability,
-          seat_arrangement: eventData.seat_arrangement,
-          poster_url: eventData.poster_url,
-          status: eventData.status,
-          rows: eventData.rows,
-          cols: eventData.cols,
-          hostname:eventData.userId.hostname,
-          contactNumber:eventData.userId.contactNumber,
-          hostemail:eventData.userId.email
-        };
-        if (eventData.event_name) {
-          return (
-            <div
-              className="col-lg-2 col-md-4 col-6 mb-4"
-              onClick={() => {
-                navigate("/view-events", {
-                  state: data,
-                });
-              }}
-              key={eventData.id}
-            >
-              <div
-                className="card"
-                style={{ height: "400px", overflow: "hidden" }}
-              >
-                <img
-                  src={`http://localhost:5000/event_poster/${eventData.poster_url}`}
-                  className="card-img-top"
-                  alt={eventData.event_name}
-                  style={{ objectFit: "cover", height: "100%" }}
-                />
-                <div className="card-body">
-                  <h5 className="card-title">{eventData.event_name}</h5>
-                  <p className="card-text">{eventData.event_type}</p>
-                </div>
+            className="container-fluid"
+            style={{ paddingLeft: "60px", paddingRight: "60px" }}
+          >
+            <section className="mt-5">
+              <h2>OutDoor Events</h2>
+              <div className="row">
+                {events.map((eventData) => {
+                  const data = {
+                    event_id: eventData._id,
+                    event_name: eventData.event_name,
+                    event_type: eventData.event_type,
+                    eventlocation: eventData.location,
+                    event_date: eventData.event_date,
+                    event_time: eventData.event_time,
+                    ticket_price: eventData.ticket_price,
+                    organizer: eventData.organizer,
+                    description: eventData.description,
+                    ticket_availability: eventData.ticket_availability,
+                    seat_arrangement: eventData.seat_arrangement,
+                    poster_url: eventData.poster_url,
+                    status: eventData.status,
+                    rows: eventData.rows,
+                    cols: eventData.cols,
+                    hostname: eventData.userId.hostname,
+                    contactNumber: eventData.userId.contactNumber,
+                    hostemail: eventData.userId.email,
+                  };
+                  if (eventData.event_name) {
+                    return (
+                      <div
+                        className="col-lg-2 col-md-4 col-6 mb-4"
+                        onClick={() => {
+                          navigate("/view-events", {
+                            state: data,
+                          });
+                        }}
+                        key={eventData.id}
+                      >
+                        <div
+                          className="card"
+                          style={{ height: "400px", overflow: "hidden" }}
+                        >
+                          <img
+                            src={`http://localhost:5000/event_poster/${eventData.poster_url}`}
+                            className="card-img-top"
+                            alt={eventData.event_name}
+                            style={{ objectFit: "cover", height: "100%" }}
+                          />
+                          <div className="card-body">
+                            <h5 className="card-title">
+                              {eventData.event_name}
+                            </h5>
+                            <p className="card-text">{eventData.event_type}</p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  }
+                })}
               </div>
-            </div>
-          );
-        }
-      })}
-    </div>
-  </section>
-</div>;
-
-
+            </section>
+          </div>
+          ;
           {/*------------------------------------------------------------------------------ */}
           <UserCarousel />
           {/*------------------------------------------------------------------------------ */}
-
           <div
             className="container-fluid"
             style={{ paddingLeft: "60px", paddingRight: "60px" }}

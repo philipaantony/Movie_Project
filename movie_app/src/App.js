@@ -55,6 +55,8 @@ import UserBookEvents from "./user/pages/user_book_event";
 import MyEventTickets from "./user/pages/user_view_myticket_events";
 import MyticketEvent from "./user/pages/myticket-event";
 import UpdateEventPage from "./custom_events/pages/update-eventpage";
+import UserViewShortFilm from "./user/pages/user_view_shortfilm";
+import UserMyFilm from "./user/pages/user_view_shortfilm_detailed";
 
 export default function App() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -73,6 +75,8 @@ export default function App() {
           {(isLoggedIn || isLoggedInlocal) && usertype === "user" ? (
             <>
               {/* User routes */}
+              <Route path="/my-films" element={<UserViewShortFilm />} />
+              <Route path="/filmview" element={<UserMyFilm />} />
               <Route path="/useropt" element={<UserChangePassOTP />} />
               <Route path="/changepassword" element={<UserChangePassword />} />
               <Route path="/editmyprofile" element={<UserEditProfile />} />
