@@ -57,6 +57,7 @@ import MyticketEvent from "./user/pages/myticket-event";
 import UpdateEventPage from "./custom_events/pages/update-eventpage";
 import UserViewShortFilm from "./user/pages/user_view_shortfilm";
 import UserMyFilm from "./user/pages/user_view_shortfilm_detailed";
+import UserPlayer from "./user/pages/user_player";
 
 export default function App() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -75,6 +76,7 @@ export default function App() {
           {(isLoggedIn || isLoggedInlocal) && usertype === "user" ? (
             <>
               {/* User routes */}
+              <Route path="/play-my-movie" element={<UserPlayer />} />
               <Route path="/my-films" element={<UserViewShortFilm />} />
               <Route path="/filmview" element={<UserMyFilm />} />
               <Route path="/useropt" element={<UserChangePassOTP />} />

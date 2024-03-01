@@ -1,3 +1,2 @@
 /node_modules
-/public/film_videos/*
-!/public/film_videos/.gitignore
+
