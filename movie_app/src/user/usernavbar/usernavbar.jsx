@@ -10,6 +10,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { useDispatch } from "react-redux";
 import { logout } from "../../Redux/user/userSlice";
 import LocationPicker from "../componets/LocationPicker";
+import { baseUrl } from "../../config/config";
 
 
 function UserNavBar(props)
@@ -17,6 +18,9 @@ function UserNavBar(props)
   const username = localStorage.getItem("name");
   const useremail = localStorage.getItem("email");
   const profilepicture = localStorage.getItem("profilepicture");
+  const logintype = localStorage.getItem("logintype");
+ 
+  console.log("-----",profilepicture);
   //const useremail = useSelector((state) => state.user.useremail);
   const navigate = useNavigate();
 
@@ -98,11 +102,16 @@ function UserNavBar(props)
                       <p className="mb-0 text-sm text-white-600">{useremail}</p>
                     </div>
                     <div className="avatar avatar-md">
-                      <img
-                        src={profilepicture || "assets/images/faces/4.jpg"}
-                        alt="Profile Picture"
-                        className="rounded-circle"
-                      />
+                    <img
+   src={
+    profilepicture === 'false' ? "assets/images/faces/4.jpg": logintype === "googleauth"
+        ? profilepicture
+        : `${baseUrl}/profile_picture/${profilepicture}`
+}
+    alt="Profile Picture"
+    className="rounded-circle"
+/>
+
                     </div>
                   </div>
                 </Dropdown.Toggle>

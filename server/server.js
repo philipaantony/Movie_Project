@@ -17,6 +17,7 @@ const Login = require("./model/loginmodel");
 const Event = require("./model/eventmodel");
 const Theater = require("./model/theatermodel");
 const TicketCountModel = require("./model/ticketcount");
+const UserModel = require('./model/usermodel');
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -141,6 +142,44 @@ const storage1 = multer.diskStorage({
 const upload = multer({ storage: storage });
 const upload1 = multer({ storage: storage1 });
 
+//profile updation
+//----------------------------------------------------------------------------------------------------
+const storagepropic = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, "public/profile_picture"); // Set the destination folder for uploaded files
+    },
+    filename: (req, file, cb) => {
+        cb(
+            null,
+            file.fieldname + "-" + Date.now() + path.extname(file.originalname)
+        );
+    },
+});
+
+const uploadprofilepic = multer({ storage: storagepropic });
+
+app.post('/api/updateprofilepicture/:userId', uploadprofilepic.single('profilepicture'), async (req, res) => {
+    try {
+        const user = await UserModel.findById(req.params.userId);
+        if (user.profile_picture) {
+            const oldImagePath = path.join(__dirname, 'public/profile_picture', user.profile_picture);
+            fs.unlinkSync(oldImagePath);
+        }
+        user.profile_picture = req.file.filename;
+        await user.save();
+        res.status(200).json({
+            message: 'Profile picture updated successfully',
+            profilepicture: req.file.filename,
+        });
+    } catch (error) {
+        console.error('Error updating profile picture:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
+
+
+//----------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------
 
 app.post("/api/addmovies", upload.single("poster_url"), async (req, res) => {

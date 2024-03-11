@@ -52,6 +52,7 @@ function GoogleauthLogin({ onChildData }) {
 
       
       localStorage.setItem("profilepicture", imageUrl);
+      console.log("------------>>>",imageUrl);
       localStorage.setItem("name", username);
       localStorage.setItem("email", email);
       localStorage.setItem("userId", userId);

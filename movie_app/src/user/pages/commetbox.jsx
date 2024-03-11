@@ -1,10 +1,38 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { baseUrl } from "../../config/config";
 
 const formatDate = (dateString) => {
+    const now = new Date();
+    const commentDate = new Date(dateString);
+
+    // Calculate the difference in milliseconds
+    const difference = now - commentDate;
+    const millisecondsPerMinute = 1000 * 60;
+    const millisecondsPerHour = millisecondsPerMinute * 60;
+
+    // Check if the provided date is the same day as the current date
+    if (
+        now.getFullYear() === commentDate.getFullYear() &&
+        now.getMonth() === commentDate.getMonth() &&
+        now.getDate() === commentDate.getDate()
+    ) {
+        if (difference < millisecondsPerMinute) {
+            return 'just now';
+        } else if (difference < millisecondsPerHour) {
+            const minutesAgo = Math.floor(difference / millisecondsPerMinute);
+            return `${minutesAgo} mins ago`;
+        } else {
+            const hoursAgo = Math.floor(difference / millisecondsPerHour);
+            return `${hoursAgo} hrs ago`;
+        }
+    }
+
+    // If it's not the same day, format the date normally
     const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-    return new Date(dateString).toLocaleDateString('en-US', options);
+    return commentDate.toLocaleDateString('en-US', options);
 };
+
 
 function CommentBox(props) {
     const userId = localStorage.getItem("userId");
@@ -79,21 +107,23 @@ function CommentBox(props) {
                     </div>
                 </div>
 
-                <h2>Movie Comments</h2>
+                <h3>Movie Comments</h3>
 
                 {/* Display fetched comments or "No comments yet" message */}
                 {comments.length > 0 ? (
                     <>
                         {comments.slice(0, visibleComments).map((commentData) => (
-                            <div className="card mb-3" key={commentData.commentId}>
+                            <div className="card mb-2" key={commentData.commentId}>
                                 <div className="card-body">
                                     <div className="avatar avatar-md">
                                         <img
-                                            src={"assets/images/faces/1.jpg"}
+                                     
+                                            src={ commentData.userId.profile_picture ===undefined? 'assets/images/faces/4.jpg':`${baseUrl}/profile_picture/${commentData.userId.profile_picture}`}
                                             alt="Profile Picture"
                                             className="rounded-circle"
                                         />
                                         <div style={{ marginLeft: "20px", textAlign: "left" }}>
+                                       
                                             <h6 className="card-title">{commentData.userId.username}</h6>
                                             <p className="card-text">{commentData.comment}</p>
                                         </div>

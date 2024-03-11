@@ -23,7 +23,8 @@ router.post('', async (req, res) => {
                 if (existingLogin.usertype === "user") {
                     const user = await User.findOne({ email });
                     if (user) {
-                        getusername = user.username; // Store the username in getusername
+                        getusername = user.username;
+                        profilepicture = user.profile_picture // Store the username in getusername
                     }
                 } else if (existingLogin.usertype === "theater") {
                     const theater = await Theater.findOne({ theater_email: email });
@@ -38,6 +39,7 @@ router.post('', async (req, res) => {
                     username: getusername,
                     usertype: existingLogin.usertype,
                     status: existingLogin.status,
+                    profilepicture: profilepicture !== undefined ? profilepicture : false
                 };
 
                 const token = jwt.sign(tokenPayload, JWT_SECRET, {

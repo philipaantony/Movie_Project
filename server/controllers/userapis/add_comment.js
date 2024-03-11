@@ -6,17 +6,11 @@ const Comment = require('../../model/commentmodel');
 router.post('', async (req, res) => {
     try {
         const { userId, filmid, comment } = req.body;
-
-        console.log(req.body)
-
-        // Create a new comment instance
         const newComment = new Comment({
             userId: userId,
             filmid: filmid,
             comment: comment,
         });
-
-        // Save the comment to the database
         const savedComment = await newComment.save();
 
         return res.status(201).json({ success: true, comment: savedComment });

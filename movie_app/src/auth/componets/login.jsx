@@ -27,13 +27,16 @@ function Login() {
         const token = response.data.token;
         const decoded = jwt_decode(token);
         console.log("decoded:", decoded);
-        const { username, email, userId,usertype,status } = decoded;
+        const { username, email, userId,usertype,status,profilepicture } = decoded;
   
         localStorage.setItem("name", username);
         localStorage.setItem("email", email);
         localStorage.setItem("userId", userId);
         localStorage.setItem("isLoggedIn", true);
         localStorage.setItem("usertype", usertype);
+        localStorage.setItem("profilepicture", profilepicture); 
+        console.log("-------------->>>",profilepicture)
+      
 
         if (usertype === "admin") {
           toast.success("Login Successfull as Admin")
