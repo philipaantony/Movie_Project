@@ -87,7 +87,7 @@ function UserViewShortFilm() {
                           </h5>
                           <p className="card-text">
                             <strong>Genre:</strong> {movie.genre}
-                            {releaseDate.toLocaleDateString()}
+                           
                           </p>
                         </div>
                       </div>
@@ -133,7 +133,7 @@ function UserViewShortFilm() {
                           </h5>
                           <p className="card-text">
                             <strong>Genre:</strong> {movie.genre}
-                            {releaseDate.toLocaleDateString()}
+                           
                           </p>
                         </div>
                       </div>

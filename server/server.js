@@ -66,7 +66,10 @@ const getcount = require("./controllers/userapis/get-count");
 const shortFilmRoutes = require("./controllers/hostapis/addfilm")
 const getuserfilmbyid = require('./controllers/hostapis/getfilmsbyuserid');
 const getfilms = require('./controllers/userapis/getallshortfilms')
+const addcommet = require('./controllers/userapis/add_comment')
 
+
+app.use("/api/postcomment", addcommet);
 app.use("/api/getshortfilms", getuserfilmbyid);
 app.use("/api/hostreg", hostreg);
 app.use("/api/getallhost", getallhost);

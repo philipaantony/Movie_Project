@@ -7,6 +7,7 @@ import Footer from "../../footer/footer";
 import { Card, Button, Row, Col } from "react-bootstrap";
 import Maincard from "../componets/moviecards/maincard";
 import axios from "axios";
+import CommentBox from "./commetbox";
 
 function UserPlayer() {
   const location = useLocation();
@@ -39,9 +40,11 @@ function UserPlayer() {
           <Col md={9}>
             <Card>
               <Card.Header>
+              
                 <h3>{movieData.shortfilm_title}</h3>
                 <p className="text-muted">
-                  {movieData.genre} - {movieData.director} -  {movieData.language}
+                  {movieData.genre} - {movieData.director} -{" "}
+                  {movieData.language}
                 </p>
               </Card.Header>
               <Card.Body>
@@ -69,19 +72,19 @@ function UserPlayer() {
                       Share
                     </Button>
                   </Col>
-                  <div style={{margin:"20px"}}>
-                  {movieData.description}
-                  </div>
-                 
+                  <div style={{ margin: "20px" }}>{movieData.description}</div>
+
                   <Col className="text-end">
-                   
                     <small className="text-muted">
                       Released on{" "}
                       {new Date(movieData.release_date).toLocaleDateString()}
                     </small>
                   </Col>
                 </Row>
+                
+              <CommentBox filmid ={movieData._id}/>
               </Card.Footer>
+
             </Card>
 
             {/* Movie cards wrapped inside a Card component */}
@@ -90,7 +93,7 @@ function UserPlayer() {
                 <Row className="g-4">
                   {movies
                     .filter((movie) => movie.shortfilm_title !== mytitle)
-                    .slice(0, 5)
+                    .slice(0, 4)
                     .map((movie, index) => {
                       if (movie.shortfilm_title === mytitle) {
                         return null; // Skip this iteration
@@ -136,30 +139,25 @@ function UserPlayer() {
                 </Row>
               </Card.Body>
             </Card>
-
-
-
-
           </Col>
           <Col md={3}>
             <div className="mt-3">
               <h5>Recent Movies</h5>
 
+              {movies
+                .filter((movie) => movie.shortfilm_title !== mytitle)
+                .slice(0, 4)
+                .sort(
+                  (a, b) => new Date(b.release_date) - new Date(a.release_date)
+                )
+                .map((movie, index) => {
+                  if (movie.shortfilm_title === mytitle) {
+                    return null; // Skip this iteration
+                  }
 
-
-
-             {movies
-                    .filter((movie) => movie.shortfilm_title !== mytitle)
-                    .slice(0, 5)
-                    .sort((a, b) => new Date(b.release_date) - new Date(a.release_date))
-                    .map((movie, index) => {
-                      if (movie.shortfilm_title === mytitle) {
-                        return null; // Skip this iteration
-                      }
-
-                      const data = { movie };
-                      const releaseDate = new Date(movie.release_date);
-                      if (releaseDate < today) {
+                  const data = { movie };
+                  const releaseDate = new Date(movie.release_date);
+                  if (releaseDate < today) {
                     return (
                       <Card key={index} className="mb-3">
                         <Row>
