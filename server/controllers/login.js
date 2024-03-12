@@ -30,6 +30,7 @@ router.post('', async (req, res) => {
                     const theater = await Theater.findOne({ theater_email: email });
                     if (theater) {
                         getusername = theater.theater_name; // Store the theater name in getusername
+                        profilepicture = undefined
                     }
                 }
 

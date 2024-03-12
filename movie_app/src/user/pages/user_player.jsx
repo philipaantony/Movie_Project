@@ -8,6 +8,7 @@ import { Card, Button, Row, Col } from "react-bootstrap";
 import Maincard from "../componets/moviecards/maincard";
 import axios from "axios";
 import CommentBox from "./commetbox";
+import LikeDislikeButton from "../componets/like-dislike-button";
 
 function UserPlayer() {
   const location = useLocation();
@@ -58,20 +59,9 @@ function UserPlayer() {
               </Card.Body>
               <Card.Footer>
                 <Row>
-                  <Col>
-                    <Button variant="primary" className="me-2">
-                      Like
-                    </Button>
-                    <Button variant="secondary" className="me-2">
-                      Dislike
-                    </Button>
-                    <Button variant="success" className="me-2">
-                      Save
-                    </Button>
-                    <Button variant="info" className="me-2">
-                      Share
-                    </Button>
-                  </Col>
+                  <div style={{ marginLeft: "30px" }} >
+                    <LikeDislikeButton filmid ={movieData._id}/>
+                  </div>
                   <div style={{ margin: "20px" }}>{movieData.description}</div>
 
                   <Col className="text-end">

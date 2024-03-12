@@ -19,6 +19,7 @@ const formatDate = (dateString) => {
     ) {
         if (difference < millisecondsPerMinute) {
             return 'just now';
+            
         } else if (difference < millisecondsPerHour) {
             const minutesAgo = Math.floor(difference / millisecondsPerMinute);
             return `${minutesAgo} mins ago`;
