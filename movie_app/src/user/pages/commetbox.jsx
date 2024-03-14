@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+
 
 const formatDate = (dateString) => {
     const now = new Date();
@@ -47,6 +49,7 @@ function CommentBox(props) {
             try {
                 const response = await axios.get(`http://localhost:5000/api/postcomment/${props.filmid}`);
                 setComments(response.data);
+                console.log(response.data);
             } catch (error) {
                 console.error("Error fetching comments:", error);
             }
@@ -84,6 +87,17 @@ function CommentBox(props) {
         setVisibleComments(visibleComments + 3);
     };
 
+    const deleteComment = async (commentid) => {
+        try {
+          // Send a DELETE request to the server with the comment ID
+          await axios.delete(`http://localhost:5000/api/postcomment/${commentid}`);
+          setRefresh(!refresh);
+        } catch (error) {
+          // Handle errors here
+          console.error('Error deleting comment:', error);
+        }
+      };
+
     return (
         <div>
             <div className="container mt-5">
@@ -102,13 +116,13 @@ function CommentBox(props) {
                                 />
                             </div>
                             <button type="submit" className="btn btn-primary mt-4 mt-md-0">
-                                Submit Comment
+                                Post
                             </button>
                         </form>
                     </div>
                 </div>
 
-                <h3>Movie Comments</h3>
+                <h3>Movie Reviews</h3>
 
                 {/* Display fetched comments or "No comments yet" message */}
                 {comments.length > 0 ? (
@@ -118,21 +132,28 @@ function CommentBox(props) {
                                 <div className="card-body">
                                     <div className="avatar avatar-md">
                                         <img
-                                     
                                             src={ commentData.userId.profile_picture ===undefined? 'assets/images/faces/4.jpg':`${baseUrl}/profile_picture/${commentData.userId.profile_picture}`}
                                             alt="Profile Picture"
                                             className="rounded-circle"
                                         />
                                         <div style={{ marginLeft: "20px", textAlign: "left" }}>
-                                       
                                             <h6 className="card-title">{commentData.userId.username}</h6>
                                             <p className="card-text">{commentData.comment}</p>
                                         </div>
                                     </div>
-
+                                   
                                     {/* Display date and time on the right side */}
                                     <div className="text-right" style={{ flex: "1", textAlign: "right" }}>
-                                        <p>{formatDate(commentData.updatedAt)}</p>
+                                        <p>
+                    
+                                        {userId === commentData.userId._id && (
+    <button className="btn" onClick={() => deleteComment(commentData._id)}>
+        Delete <DeleteForeverIcon className="text-danger" />
+    </button>
+)}
+                                            
+                                            {formatDate(commentData.updatedAt)}
+                                        </p>
                                     </div>
                                 </div>
                             </div>

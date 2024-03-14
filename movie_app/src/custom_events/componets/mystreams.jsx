@@ -8,6 +8,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import ReactPlayer from "react-player";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 function MyStreams() {
   const [shortFilms, setShortFilms] = useState([]);
@@ -35,6 +36,17 @@ function MyStreams() {
     setSelectedFilm(null);
   };
 
+  const handleDelete = (filmId) => {
+    // Send a DELETE request to your API to delete the movie
+    axios.delete(`${baseUrl}/api/getshortfilms/${filmId}`)
+      .then((response) => {
+        alert(response.data.message)
+        setShortFilms(shortFilms.filter(film => film._id !== filmId));
+      })
+      .catch((error) => {
+        console.error("Error deleting the movie:", error);
+      });
+  };
   return (
     <div id="main">
       <div className="container mt-5">
@@ -63,6 +75,13 @@ function MyStreams() {
                       onClick={() => handleClickOpen(shortFilm)}
                     >
                       View Details
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      onClick={() => handleDelete(shortFilm._id)}
+                    >
+                      <DeleteForeverIcon/>
                     </Button>
                   </div>
                 </div>
