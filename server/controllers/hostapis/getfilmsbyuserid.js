@@ -8,8 +8,6 @@ router.get('/:userId', async (req, res) => {
     try {
 
         const userId = req.params.userId;
-
-        // Find all short films by userId
         const shortFilms = await ShortFilm.find({ userId });
 
         // Send the short films as the response

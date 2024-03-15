@@ -19,18 +19,19 @@ router.post('', async (req, res) => {
             const passwordMatch = await bcrypt.compare(password, existingLogin.password);
             if (passwordMatch) {
                 let getusername = '';
+                let profilepicture = ''; // Define profilepicture here with a default value
 
                 if (existingLogin.usertype === "user") {
                     const user = await User.findOne({ email });
                     if (user) {
                         getusername = user.username;
-                        profilepicture = user.profile_picture // Store the username in getusername
+                        profilepicture = user.profile_picture; // Store the username in getusername
                     }
                 } else if (existingLogin.usertype === "theater") {
                     const theater = await Theater.findOne({ theater_email: email });
                     if (theater) {
                         getusername = theater.theater_name; // Store the theater name in getusername
-                        profilepicture = undefined
+                        // profilepicture remains undefined
                     }
                 }
 
@@ -40,7 +41,7 @@ router.post('', async (req, res) => {
                     username: getusername,
                     usertype: existingLogin.usertype,
                     status: existingLogin.status,
-                    profilepicture: profilepicture !== undefined ? profilepicture : false
+                    profilepicture: profilepicture !== '' ? profilepicture : false
                 };
 
                 const token = jwt.sign(tokenPayload, JWT_SECRET, {
