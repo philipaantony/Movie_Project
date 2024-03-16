@@ -5,12 +5,14 @@ import { useNavigate } from "react-router-dom";
 import GoBackButton from "../../../public/gobackButton";
 import { TMBDAPI } from "../../../config/config";
 
+import { usePage } from '../../../config/PageContext';
+
 function ExploreHome() {
   const navigate = useNavigate();
-  const [page, setPage] = useState(1);
+  const { page, setPage, selectedLanguage, setSelectedLanguage } = usePage();
   const [userData, setUserData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState("ml"); // State to hold selected language
+ 
 
   const fetchData = async () => {
     setIsLoading(true);
@@ -70,22 +72,17 @@ function ExploreHome() {
       <GoBackButton />
       {isLoading ? (
         <>
-         
-            
-           
-      
-
-           
-         <div
-  className="card-body d-flex justify-content-center align-items-center"
-  style={{ height: "60vh" }}
->
-  <div className="spinner-border spinner-border-lg text-danger" role="status">
-    <span className="sr-only">Loading...</span>
-  </div>
-</div>
-
-            
+          <div
+            className="card-body d-flex justify-content-center align-items-center"
+            style={{ height: "60vh" }}
+          >
+            <div
+              className="spinner-border spinner-border-lg text-danger"
+              role="status"
+            >
+              <span className="sr-only">Loading...</span>
+            </div>
+          </div>
         </>
       ) : (
         <>

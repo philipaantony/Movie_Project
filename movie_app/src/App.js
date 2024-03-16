@@ -60,6 +60,7 @@ import UserMyFilm from "./user/pages/user_view_shortfilm_detailed";
 import UserPlayer from "./user/pages/user_player";
 import ExploreHome from "./user/TMDB/pages/explorehome";
 import MovieMoreDetails from "./user/TMDB/pages/movie_more_details";
+import { PageProvider } from './config/PageContext';
 
 export default function App() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -71,116 +72,118 @@ export default function App() {
 
   return (
     <div>
-      <Router>
-        <ScrollToTop />
+      <PageProvider>
+        <Router>
+          <ScrollToTop />
 
-        <Routes>
-          {(isLoggedIn || isLoggedInlocal) && usertype === "user" ? (
-            <>
-              {/* User routes */}
-              <Route path="/play-my-movie" element={<UserPlayer />} />
-              <Route path="/exploremore" element={<ExploreHome />} />
-              <Route path="/exploremore-details" element={<MovieMoreDetails />} />
-              <Route path="/my-films" element={<UserViewShortFilm />} />
-              <Route path="/filmview" element={<UserMyFilm />} />
-              <Route path="/useropt" element={<UserChangePassOTP />} />
-              <Route path="/changepassword" element={<UserChangePassword />} />
-              <Route path="/editmyprofile" element={<UserEditProfile />} />
-              <Route path="/myticket" element={<Myticket />} />
+          <Routes>
+            {(isLoggedIn || isLoggedInlocal) && usertype === "user" ? (
+              <>
+                {/* User routes */}
+                <Route path="/play-my-movie" element={<UserPlayer />} />
+                <Route path="/exploremore" element={<ExploreHome />} />
+                <Route path="/exploremore-details" element={<MovieMoreDetails />} />
+                <Route path="/my-films" element={<UserViewShortFilm />} />
+                <Route path="/filmview" element={<UserMyFilm />} />
+                <Route path="/useropt" element={<UserChangePassOTP />} />
+                <Route path="/changepassword" element={<UserChangePassword />} />
+                <Route path="/editmyprofile" element={<UserEditProfile />} />
+                <Route path="/myticket" element={<Myticket />} />
 
-              <Route path="/my-event-ticket" element={<MyticketEvent />} />
-
-
-              <Route path="/mybookings" element={<UserViewMyTickets />} />
-              <Route path="/mybookings-events" element={<MyEventTickets />} />
-              <Route path="/favmovies" element={<UserViewFavMovies />} />
-              <Route path="/userhome" element={<UserHomePage2 />} />
-              <Route path="/selectseat" element={<UserSelectSeat />} />
-              <Route path="/userhome" element={<UserHomePage2 />} />
-
-              <Route path="/userabout" element={<UserAboutPage />} />
-              <Route path="/viewmovie" element={<UserViewMovie />} />
-              <Route path="/userprofile" element={<UserProfilePage />} />
+                <Route path="/my-event-ticket" element={<MyticketEvent />} />
 
 
-              <Route path="/view-events" element={<ViewMyEvents />} />
-              <Route path="/book-event" element={<UserBookEvents />} />
-            </>
-          ) : usertype === "admin" ? (
-            <>
-              {/* Admin routes */}
+                <Route path="/mybookings" element={<UserViewMyTickets />} />
+                <Route path="/mybookings-events" element={<MyEventTickets />} />
+                <Route path="/favmovies" element={<UserViewFavMovies />} />
+                <Route path="/userhome" element={<UserHomePage2 />} />
+                <Route path="/selectseat" element={<UserSelectSeat />} />
+                <Route path="/userhome" element={<UserHomePage2 />} />
 
-              <Route path="/viewhost" element={<AdminViewHostPage />} />
-              <Route path="/viewpostedmovies" element={<AdminViewPostedMoviesPage />} />
-              <Route path="/updatemovie" element={<AdminUpadateMoviePage />} />
-              <Route path="/viewusers" element={<AdminViewVsersPage />} />
-              <Route path="/addmovie" element={<AdminAddMoviePage />} />
-              <Route path="/adminhome" element={<AdminHomePage />} />
-              <Route path="/viewtheaters" element={<AdminViewTheatersPage />} />
-              <Route
-                path="/viewtheaterapplication"
-                element={<AdminApproveTheaterPage />}
-              />
-
-            </>
-          ) : usertype === "theater" ? (
-            <>
-              {/* theatre routes */}
+                <Route path="/userabout" element={<UserAboutPage />} />
+                <Route path="/viewmovie" element={<UserViewMovie />} />
+                <Route path="/userprofile" element={<UserProfilePage />} />
 
 
-              <Route path="/viewstatisticsbooking" element={<TSBooked />} />
-              <Route path="/viewstatistics" element={<ViewStatisticsPage />} />
-              <Route path="/createnewtime" element={<AddScreeningTimePage />} />
-              <Route
-                path="/createnewscreen"
-                element={<CreateSeatOrientation />}
-              />
-              <Route
-                path="/vieworientation"
-                element={<Viewscreenorientation />}
-              ></Route>
-              <Route path="/assignmovie" element={<AssignMoviesPage />}></Route>
+                <Route path="/view-events" element={<ViewMyEvents />} />
+                <Route path="/book-event" element={<UserBookEvents />} />
+              </>
+            ) : usertype === "admin" ? (
+              <>
+                {/* Admin routes */}
 
-              <Route path="/assignmovietoscreen" element={<AssignMovieToScreenPage />}></Route>
-              <Route path="/theaterhome" element={<TheaterHomePage />}></Route>
-              <Route path="/addnewscreen" element={<AddScreen />} />
-              <Route path="/viewmyscreens" element={<Viewtheaterlistpage />} />
-              <Route path="/seat" element={<CreateSeatOrientation />} />
-            </>
-          ) : usertype === "host" ? (
-            <>
+                <Route path="/viewhost" element={<AdminViewHostPage />} />
+                <Route path="/viewpostedmovies" element={<AdminViewPostedMoviesPage />} />
+                <Route path="/updatemovie" element={<AdminUpadateMoviePage />} />
+                <Route path="/viewusers" element={<AdminViewVsersPage />} />
+                <Route path="/addmovie" element={<AdminAddMoviePage />} />
+                <Route path="/adminhome" element={<AdminHomePage />} />
+                <Route path="/viewtheaters" element={<AdminViewTheatersPage />} />
+                <Route
+                  path="/viewtheaterapplication"
+                  element={<AdminApproveTheaterPage />}
+                />
 
-              <Route path="/eventhome" element={<EventHomeDashPage />} />
-              <Route path="/myevents" element={<MyEventPage />} />
-              <Route path="/mystreams" element={<MyStreamsPage />} />
-              <Route path="/addnewevent" element={< AddnewEventPage />} />
-              <Route path="/addshortfilm" element={<AddShortFilmPage />} />
-              <Route path="/updateevents" element={<UpdateEventPage />} />
-
-            </>
-          ) : (<>
-
-          </>)}
+              </>
+            ) : usertype === "theater" ? (
+              <>
+                {/* theatre routes */}
 
 
+                <Route path="/viewstatisticsbooking" element={<TSBooked />} />
+                <Route path="/viewstatistics" element={<ViewStatisticsPage />} />
+                <Route path="/createnewtime" element={<AddScreeningTimePage />} />
+                <Route
+                  path="/createnewscreen"
+                  element={<CreateSeatOrientation />}
+                />
+                <Route
+                  path="/vieworientation"
+                  element={<Viewscreenorientation />}
+                ></Route>
+                <Route path="/assignmovie" element={<AssignMoviesPage />}></Route>
 
+                <Route path="/assignmovietoscreen" element={<AssignMovieToScreenPage />}></Route>
+                <Route path="/theaterhome" element={<TheaterHomePage />}></Route>
+                <Route path="/addnewscreen" element={<AddScreen />} />
+                <Route path="/viewmyscreens" element={<Viewtheaterlistpage />} />
+                <Route path="/seat" element={<CreateSeatOrientation />} />
+              </>
+            ) : usertype === "host" ? (
+              <>
 
-          <Route path="/viewstreaming" element={<UserViewStreamingTheatrePage />} />
-          <Route path="/" element={<Loginpage />} />
-          <Route path="/eventreg" element={<EventRegistrationPage />} />
-          <Route path="/verify" element={<Otppage />} />
-          <Route path="/explore" element={<ExplorePage />} />
-          <Route path="/theaterreg" element={<TheaterRegistrationPage />} />
-          <Route path="/requestpending" element={<RequestPending />} />
-          <Route path="/requestrejected" element={<RequestRejected />} />
-          <Route path="/forgotpwd" element={<ForgotPasswordPage />} />
-          <Route path="/register" element={<Registrationpage />} />
-          <Route path="*" element={<Error404 />} />
+                <Route path="/eventhome" element={<EventHomeDashPage />} />
+                <Route path="/myevents" element={<MyEventPage />} />
+                <Route path="/mystreams" element={<MyStreamsPage />} />
+                <Route path="/addnewevent" element={< AddnewEventPage />} />
+                <Route path="/addshortfilm" element={<AddShortFilmPage />} />
+                <Route path="/updateevents" element={<UpdateEventPage />} />
+
+              </>
+            ) : (<>
+
+            </>)}
 
 
 
-        </Routes>
-      </Router>
+
+            <Route path="/viewstreaming" element={<UserViewStreamingTheatrePage />} />
+            <Route path="/" element={<Loginpage />} />
+            <Route path="/eventreg" element={<EventRegistrationPage />} />
+            <Route path="/verify" element={<Otppage />} />
+            <Route path="/explore" element={<ExplorePage />} />
+            <Route path="/theaterreg" element={<TheaterRegistrationPage />} />
+            <Route path="/requestpending" element={<RequestPending />} />
+            <Route path="/requestrejected" element={<RequestRejected />} />
+            <Route path="/forgotpwd" element={<ForgotPasswordPage />} />
+            <Route path="/register" element={<Registrationpage />} />
+            <Route path="*" element={<Error404 />} />
+
+
+
+          </Routes>
+        </Router>
+      </PageProvider>
     </div>
   );
 }
