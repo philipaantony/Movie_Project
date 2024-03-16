@@ -66,6 +66,15 @@ function UserNavBar(props)
             </li>
           </Link>
 
+          <Link to="/exploremore">
+            <li
+              style={{ color: "white" }}
+              className={`nav-item ${props.activeexploremore}`}
+            >
+              Explore More
+            </li>
+          </Link>
+
           <Link to="/userprofile">
             <li
             id="viewpro"

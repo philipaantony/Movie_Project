@@ -58,6 +58,8 @@ import UpdateEventPage from "./custom_events/pages/update-eventpage";
 import UserViewShortFilm from "./user/pages/user_view_shortfilm";
 import UserMyFilm from "./user/pages/user_view_shortfilm_detailed";
 import UserPlayer from "./user/pages/user_player";
+import ExploreHome from "./user/TMDB/pages/explorehome";
+import MovieMoreDetails from "./user/TMDB/pages/movie_more_details";
 
 export default function App() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -77,6 +79,8 @@ export default function App() {
             <>
               {/* User routes */}
               <Route path="/play-my-movie" element={<UserPlayer />} />
+              <Route path="/exploremore" element={<ExploreHome />} />
+              <Route path="/exploremore-details" element={<MovieMoreDetails />} />
               <Route path="/my-films" element={<UserViewShortFilm />} />
               <Route path="/filmview" element={<UserMyFilm />} />
               <Route path="/useropt" element={<UserChangePassOTP />} />
