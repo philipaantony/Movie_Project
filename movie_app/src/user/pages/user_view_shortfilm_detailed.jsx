@@ -73,7 +73,7 @@ function UserMyFilm() {
           {!isReleased && (
             <p style={{ fontSize: "20px", fontWeight: "bold" }}>
               <strong>
-                Time Remaining:
+                Count Down:
                 <br />
               </strong>{" "}
               {timeRemaining.days > 0 && `${timeRemaining.days} days, `}

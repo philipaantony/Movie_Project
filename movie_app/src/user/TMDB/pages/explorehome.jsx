@@ -168,7 +168,7 @@ function ExploreHome() {
                             onError={(e) => {
                               e.target.onerror = null;
                               e.target.src =
-                                "https://image.tmdb.org/t/p/w500/E4prGNIMN8USgwZBkVj3ADasAG.jpg";
+                                "https://image.tmdb.org/t/p/w500/k3AjjlEH1Rb9YhmTTaHe9lNfECF.jpg";
                             }}
                             className="card-img-top"
                             alt={movie.original_title}

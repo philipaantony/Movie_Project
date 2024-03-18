@@ -29,13 +29,21 @@ function Login() {
         console.log("decoded:", decoded);
         const { username, email, userId,usertype,status,profilepicture } = decoded;
   
+        console.log("-----pic--------->>>",profilepicture);
+        console.log("------email-------->>>",email);
         localStorage.setItem("name", username);
         localStorage.setItem("email", email);
         localStorage.setItem("userId", userId);
         localStorage.setItem("isLoggedIn", true);
         localStorage.setItem("usertype", usertype);
+        if (profilepicture === undefined) {
+          localStorage.setItem("profilepicture", false); 
+      }
+      else{
         localStorage.setItem("profilepicture", profilepicture); 
-        console.log("-------------->>>",profilepicture)
+      }
+       
+        
       
 
         if (usertype === "admin") {

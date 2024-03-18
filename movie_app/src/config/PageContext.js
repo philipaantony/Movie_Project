@@ -4,7 +4,7 @@ import React, { createContext, useState, useContext } from 'react';
 const PageContext = createContext();
 
 export const PageProvider = ({ children }) => {
-    const [page, setPage] = useState(1); // Default current page is 1
+    const [page, setPage] = useState(1);
     const [selectedLanguage, setSelectedLanguage] = useState("ml");
 
     return (

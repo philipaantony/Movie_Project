@@ -81,7 +81,7 @@ function UserProfile() {
                   <div className="mt-3">
                     <form onSubmit={handleSubmit}>
                       <input type="file" onChange={handleProfilePictureChange} />
-                      <button type="submit">Submit</button>
+                      <button  className="btn btn-success"type="submit">Change</button>
                     </form>
                   </div>
                 )}
