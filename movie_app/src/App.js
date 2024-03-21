@@ -5,7 +5,6 @@ import CreateSeatOrientation from "./theater/theater_orientation";
 import TheaterHomePage from "./theater/pages/theater_home_page";
 import AddScreen from "./theater/componets/add_screen";
 import Viewscreenorientation from "./theater/componets/viewscreenorientation";
-
 import UserAboutPage from "./user/pages/user_about_page";
 import Loginpage from "./auth/pages/loginpage";
 import Registrationpage from "./auth/pages/registrationpage";
@@ -61,6 +60,8 @@ import UserPlayer from "./user/pages/user_player";
 import ExploreHome from "./user/TMDB/pages/explorehome";
 import MovieMoreDetails from "./user/TMDB/pages/movie_more_details";
 import { PageProvider } from './config/PageContext';
+import SearchMovies from "./user/ML-implimentation/search";
+import GetId from "./user/ML-implimentation/getid";
 
 export default function App() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -80,6 +81,8 @@ export default function App() {
             {(isLoggedIn || isLoggedInlocal) && usertype === "user" ? (
               <>
                 {/* User routes */}
+                <Route path="/ml" element={<SearchMovies />} />
+                <Route path="/id" element={<GetId />} />
                 <Route path="/play-my-movie" element={<UserPlayer />} />
                 <Route path="/exploremore" element={<ExploreHome />} />
                 <Route path="/exploremore-details" element={<MovieMoreDetails />} />
