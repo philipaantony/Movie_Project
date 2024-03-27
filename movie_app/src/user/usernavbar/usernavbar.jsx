@@ -4,7 +4,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MovieIcon from "@mui/icons-material/Movie";
 import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
 import "../../public/navbar.css";
-import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import SubscriptionsSharpIcon from '@mui/icons-material/SubscriptionsSharp';
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useDispatch } from "react-redux";
@@ -12,15 +12,13 @@ import { logout } from "../../Redux/user/userSlice";
 import LocationPicker from "../componets/LocationPicker";
 import { baseUrl } from "../../config/config";
 
-
-function UserNavBar(props)
- {
+function UserNavBar(props) {
   const username = localStorage.getItem("name");
   const useremail = localStorage.getItem("email");
   const profilepicture = localStorage.getItem("profilepicture");
   const logintype = localStorage.getItem("logintype");
- 
-  console.log("-----",profilepicture);
+
+  console.log("-----", profilepicture);
   //const useremail = useSelector((state) => state.user.useremail);
   const navigate = useNavigate();
 
@@ -31,9 +29,6 @@ function UserNavBar(props)
     dispatch(logout({ userid: "", useremail: "" }));
     navigate("/", { replace: true }, { redirect: true });
   };
-
- 
-
 
   const headerStyle = {
     background: "linear-gradient(to left,#212529 ,#212529 )", // Adjust the colors as needed
@@ -56,7 +51,6 @@ function UserNavBar(props)
             </li>
           </Link>
 
-
           <Link to="/userabout">
             <li
               style={{ color: "white" }}
@@ -77,7 +71,7 @@ function UserNavBar(props)
 
           <Link to="/userprofile">
             <li
-            id="viewpro"
+              id="viewpro"
               style={{ color: "white" }}
               className={`nav-item ${props.activep}`}
             >
@@ -87,13 +81,15 @@ function UserNavBar(props)
 
           <div style={{ width: "40px" }}></div>
 
-          <LocationPicker/>
+          <LocationPicker />
         </ul>
 
         <nav className="navbar navbar-expand navbar-light ">
           <div className="container-fluid">
             <div style={{ padding: "20px" }}>
-              <NotificationsNoneIcon />
+              <Link to="/subscription">
+              <SubscriptionsSharpIcon />
+              </Link>
             </div>
             <div style={{ padding: "20px" }}>
               <BookmarkBorderIcon />
@@ -111,16 +107,17 @@ function UserNavBar(props)
                       <p className="mb-0 text-sm text-white-600">{useremail}</p>
                     </div>
                     <div className="avatar avatar-md">
-                    <img
-   src={
-    profilepicture === 'false' ? "assets/images/faces/4.jpg": logintype === "googleauth"
-        ? profilepicture
-        : `${baseUrl}/profile_picture/${profilepicture}`
-}
-    alt="Profile Picture"
-    className="rounded-circle"
-/>
-
+                      <img
+                        src={
+                          profilepicture === "false"
+                            ? "assets/images/faces/4.jpg"
+                            : logintype === "googleauth"
+                            ? profilepicture
+                            : `${baseUrl}/profile_picture/${profilepicture}`
+                        }
+                        alt="Profile Picture"
+                        className="rounded-circle"
+                      />
                     </div>
                   </div>
                 </Dropdown.Toggle>
@@ -138,25 +135,18 @@ function UserNavBar(props)
                     </Link>
                   </Dropdown.Item>
 
-
                   <Dropdown.Item style={{ color: "green" }}>
-              
-                  <div  id="mybooking"><Link to="/mybookings">
-                    <MovieIcon /> My Bookings
-                    </Link>
+                    <div id="mybooking">
+                      <Link to="/mybookings">
+                        <MovieIcon /> My Bookings
+                      </Link>
                     </div>
                   </Dropdown.Item>
 
-                 
-                  
-
-
                   <Dropdown.Item style={{ color: "red" }}>
-                  <Link to='/favmovies'>
-                    <CollectionsBookmarkIcon /> Saved Collection
-                   </Link>
-
-
+                    <Link to="/favmovies">
+                      <CollectionsBookmarkIcon /> Saved Collection
+                    </Link>
                   </Dropdown.Item>
                   <Dropdown.Item onClick={() => handleLogout()}>
                     Logout

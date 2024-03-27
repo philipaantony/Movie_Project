@@ -62,6 +62,7 @@ import MovieMoreDetails from "./user/TMDB/pages/movie_more_details";
 import { PageProvider } from './config/PageContext';
 import SearchMovies from "./user/ML-implimentation/search";
 import GetId from "./user/ML-implimentation/getid";
+import Subscription from "./user/pages/subscription";
 
 export default function App() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -82,6 +83,7 @@ export default function App() {
               <>
                 {/* User routes */}
                 <Route path="/ml" element={<SearchMovies />} />
+                <Route path="/subscription" element={<Subscription />}></Route>
                 <Route path="/id" element={<GetId />} />
                 <Route path="/play-my-movie" element={<UserPlayer />} />
                 <Route path="/exploremore" element={<ExploreHome />} />
