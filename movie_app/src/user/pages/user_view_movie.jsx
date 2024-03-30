@@ -116,6 +116,17 @@ function UserViewMovie() {
                 </button>
               ) : (
                 <button
+                onClick={() => {
+                  navigate("/watch-movie", {
+                    state: {
+                      movie_id: movie_id,
+                      movieName: location.state.title,
+                      language: location.state.language,
+                    },
+                  });
+                }}
+
+
                   className="btn btn-danger btn-lg me-3"
                   style={{ padding: "10px 20px" }}
                 >

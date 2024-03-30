@@ -56,6 +56,7 @@ function UserPlayer() {
                   height="auto"
                   controls={true}
                 />
+
               </Card.Body>
               <Card.Footer>
                 <Row>

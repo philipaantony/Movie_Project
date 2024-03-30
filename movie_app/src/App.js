@@ -63,6 +63,7 @@ import { PageProvider } from './config/PageContext';
 import SearchMovies from "./user/ML-implimentation/search";
 import GetId from "./user/ML-implimentation/getid";
 import Subscription from "./user/pages/subscription";
+import WatchMovies from "./user/pages/watchmovies";
 
 export default function App() {
   const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
@@ -107,6 +108,7 @@ export default function App() {
 
                 <Route path="/userabout" element={<UserAboutPage />} />
                 <Route path="/viewmovie" element={<UserViewMovie />} />
+                <Route path="/watch-movie" element={<WatchMovies />} />
                 <Route path="/userprofile" element={<UserProfilePage />} />
 
 
