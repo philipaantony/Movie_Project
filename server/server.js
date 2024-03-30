@@ -68,10 +68,13 @@ const shortFilmRoutes = require("./controllers/hostapis/addfilm")
 const getuserfilmbyid = require('./controllers/hostapis/getfilmsbyuserid');
 const getfilms = require('./controllers/userapis/getallshortfilms')
 const addcommet = require('./controllers/userapis/add_comment')
-const addlikedislike = require('./controllers/userapis/add-like')
+const addlikedislike = require('./controllers/userapis/add-like');
+const sub = require('./controllers/userapis/subscription');
+const getbysub = require('./controllers/userapis/get-my-subscription');
 
 
-
+app.use("/api/get-my-subscriptions", getbysub);
+app.use("/api/subscriptions", sub);
 app.use("/api/like", addlikedislike);
 app.use("/api/postcomment", addcommet);
 app.use("/api/getshortfilms", getuserfilmbyid);

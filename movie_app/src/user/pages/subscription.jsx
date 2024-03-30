@@ -1,14 +1,31 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Footer from "../../footer/footer";
 import UserNavBar from "../usernavbar/usernavbar";
 import axios from "axios";
+import { baseUrl } from "../../config/config";
+import AddTaskIcon from '@mui/icons-material/AddTask';
 
 function Subscription() {
 
   const userId = localStorage.getItem("userId");
+  const [subscriptionPlan, setSubscriptionPlan] = useState('basic');
+  const [refresh,setRefresh] = useState(true);
+  useEffect(() => {
+    const fetchSubscriptionPlan = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/api/get-my-subscriptions/${userId}`);
+            setSubscriptionPlan(response.data.subscription_plan);
+            console.log(response.data.subscription_plan);
+        } catch (error) {
+            console.error('Error fetching subscription plan:', error);
+        }
+    };
+    fetchSubscriptionPlan();
+}, [refresh]); 
 
 
-  async function displayRazorpay(totalPrice) {
+  async function displayRazorpay(totalPrice,plan) {
+    const subscription_plan = plan;
     const res = await loadScript(
       "https://checkout.razorpay.com/v1/checkout.js"
     );
@@ -57,7 +74,7 @@ function Subscription() {
         const orderId = result.data.orderId;
         const paymentId = result.data.paymentId;
         if (result.data.msg === "success") {
-          PurchasePlan(orderId, paymentId, amount.toString());
+          PurchasePlan(orderId, paymentId, amount.toString(),subscription_plan);
         }
       },
       prefill: {
@@ -91,11 +108,36 @@ function Subscription() {
     });
   }
 
-  const PurchasePlan = (orderId, paymentId, amount) => {
+  const PurchasePlan = (orderId, paymentId, amount,plan) => {
     console.log("my data to be passed...")
-    console.log(orderId);
-    console.log(paymentId);
-    console.log(amount);
+    const subscription_plan = plan;
+    let plan_validity
+    if(subscription_plan ==="standard")
+    {
+      plan_validity ="6"
+    }
+    else{
+      plan_validity ="12"
+    }
+    const payment_date = Date.now(); 
+    const mydata = {
+      userId,
+      subscription_plan,
+      orderId,
+      paymentId,
+      payment_date,
+      plan_validity}
+    console.log(mydata);
+
+    axios.post(`${baseUrl}/api/subscriptions`, mydata)
+    .then(response => {
+        console.log('Data posted successfully:', response.data);
+        setRefresh(!refresh);
+        alert(response.data.message);
+    })
+    .catch(error => {
+        console.error('Error posting data:', error);
+    });
     
   }
 
@@ -108,6 +150,7 @@ function Subscription() {
         <br />
         <center>
           <h4 className="card-title">Choose Your Movie Subscription Plan</h4>
+          
         </center>
 
         <div className="col-12 col-md-8 offset-md-2">
@@ -117,10 +160,23 @@ function Subscription() {
                 <div className="card">
                   <Basic />
                   <div className="card-footer">
+                  {subscriptionPlan ==="basic" ? 
+                    
+                    <>
                     <button className="btn btn-success btn-block">
                       {" "}
                       <i className="bi bi-check-circle" /> Current Plan
                     </button>
+                    </>:
+                    <>
+                
+              
+                <AddTaskIcon/>
+                <span style={{paddingLeft:"10px"}}>
+                You are on {subscriptionPlan}
+                </span>
+        
+                    </>}
                   </div>
                 </div>
               </div>
@@ -129,11 +185,28 @@ function Subscription() {
                 <div className="card card-highlighted">
                   <Standard />
                   <div className="card-footer">
+                    {subscriptionPlan ==="standard" ? 
+                    
+                  
+                    <button className="btn btn-outline-white btn-block btn btn-success ">
+                      {" "}
+                      <i className="bi bi-check-circle" /> Current Plan
+                    </button>
+                    : subscriptionPlan ==="premium"?<div style={{ color: 'white' }}>
+                    <AddTaskIcon />
+                    <span style={{paddingLeft:"10px"}}>
+                You are on {subscriptionPlan}</span>
+                    </div>:
+                  
+
                     <button 
-                    onClick={() => displayRazorpay('499')}
+                    onClick={() => displayRazorpay('299','standard')}
                     className="btn btn-outline-white btn-block">
                       Order Now
                     </button>
+                    
+                    }
+                    
                   </div>
                 </div>
               </div>
@@ -141,11 +214,24 @@ function Subscription() {
                 <div className="card">
                   <Premium />
                   <div className="card-footer">
-                    <button 
-                      onClick={() => displayRazorpay('999')}
+                  
+
+                    {subscriptionPlan ==="premium" ? 
+                    
+                    <>
+                    <button className="btn btn-success btn-block">
+                      {" "}
+                      <i className="bi bi-check-circle" /> Current Plan
+                    </button>
+                    </>:
+                    <>
+                     <button 
+                      onClick={() => displayRazorpay('499','premium')}
                     className="btn btn-primary btn-block">
                       Order Now
                     </button>
+                    
+                    </>}
                   </div>
                 </div>
               </div>
@@ -193,15 +279,15 @@ function Basic() {
       <ul>
         <li>
           <i className="bi bi-check-circle" />
-          Access to 10 movies per month
+          Free Booking
         </li>
         <li>
           <i className="bi bi-check-circle" />
-          Limited movie genres
+          Explore all Movies
         </li>
         <li>
           <i className="bi bi-check-circle" />
-          No HD streaming
+          Save Movies
         </li>
       </ul>
     </>
@@ -216,7 +302,7 @@ function Premium() {
         <p className="text-center">Exclusive access and features</p>
       </div>
 
-      <h1 className="price">₹999</h1>
+      <h1 className="price">₹499</h1>
       <ul>
         <li>
           <i className="bi bi-check-circle" />1 Year Plan
@@ -253,10 +339,10 @@ function Standard() {
         <h4 className="card-title">Standard</h4>
         <p />
       </div>
-      <h1 className="price text-white">₹499</h1>
+      <h1 className="price text-white">₹299</h1>
       <ul>
         <li>
-          <i className="bi bi-check-circle" />1 Year Plan
+          <i className="bi bi-check-circle" />6 Months Plan
         </li>
         <li>
           <i className="bi bi-check-circle" />
