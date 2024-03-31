@@ -50,6 +50,10 @@ const movieSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    movie_url: {
+        type: String,
+        required: true
+    }
 });
 
 const Movies = mongoose.model('movies', movieSchema);

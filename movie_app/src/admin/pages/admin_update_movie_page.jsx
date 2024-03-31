@@ -5,7 +5,7 @@ import UpdateMovie from '../componets/admin_update_movies'
 function AdminUpadateMoviePage() {
   return (
     <>
-    <AdminSidebar/>
+    <AdminSidebar viewmovie={"sidebar-item active"}/>
     <UpdateMovie/>
     </>
   )

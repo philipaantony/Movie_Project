@@ -11,7 +11,24 @@ import Footer from "../../footer/footer";
 import { toast, Toaster } from "react-hot-toast";
 import YouTube from "react-youtube";
 
+import { useState } from 'react';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+
+
+
+
+
+
+
 function UserViewMovie() {
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+
   const location = useLocation();
   const movie_id = location.state.movie_id;
   const dispatch = useDispatch();
@@ -29,7 +46,7 @@ function UserViewMovie() {
     console.log(movie_id);
 
     try {
-      const response = await axios.post(`${baseUrl}/api//save-movie`, {
+      const response = await axios.post(`${baseUrl}/api/save-movie`, {
         user_id: userId, // Replace with the actual user_id
         movie_id: movie_id,
       });
@@ -48,6 +65,9 @@ function UserViewMovie() {
   return (
     <div>
       <UserNavBar activehome="active" />
+      
+
+      
       <div>
         <Toaster />
       </div>
@@ -85,6 +105,7 @@ function UserViewMovie() {
                 <p>
                   <strong>Cast:</strong> {location.state.cast}
                 </p>
+              
                 <p>
                   <strong>Duration:</strong> {location.state.duration}
                 </p>
@@ -115,6 +136,36 @@ function UserViewMovie() {
                   Book Now
                 </button>
               ) : (
+
+                <>
+                {location.state.movie_url ===undefined ? <>
+               <Button 
+               className="btn btn-danger btn-lg me-3"
+               style={{ padding: "10px 20px" }}
+                onClick={handleShow}>
+        Watch Now
+      </Button>
+
+      <Modal show={show} onHide={handleClose}>
+  <Modal.Header closeButton>
+    <Modal.Title>Sorry</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+  This movie is not available for watching at the moment
+    Please wait to get the movie for online streaming. We apologize for any inconvenience. 
+    <br />
+    <br />
+    Team Movie Verse
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={handleClose}>
+      Close
+    </Button>
+  </Modal.Footer>
+</Modal>
+
+                
+                </>:<>
                 <button
                 onClick={() => {
                   navigate("/watch-movie", {
@@ -122,6 +173,7 @@ function UserViewMovie() {
                       movie_id: movie_id,
                       movieName: location.state.title,
                       language: location.state.language,
+                      movie_url:location.state.movie_url
                     },
                   });
                 }}
@@ -132,6 +184,9 @@ function UserViewMovie() {
                 >
                   Watch Now
                 </button>
+                </>}
+              
+                </>
               )}
               <button
                 onClick={saveMovie}
@@ -149,7 +204,7 @@ function UserViewMovie() {
                 height: "490",
                 width: "740",
                 playerVars: {
-                  autoplay: 1,
+                  autoplay: 0,
                   mute:1,
                 
                 },

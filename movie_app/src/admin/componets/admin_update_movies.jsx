@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import { baseUrl } from "../../config/config";
 
 function UpdateMovie() {
   const location = useLocation();
   const movieid = location.state.movie_id;
   console.log(location.state.movie_id);
   const [file, setFile] = useState(null);
+
+  const [movieUrl, setMovieUrl] = useState('');
 
   const {
     register,
@@ -38,6 +41,8 @@ function UpdateMovie() {
         setValue("production", movieData.production);
         setValue("cast", movieData.cast);
         setValue("trailer_url", movieData.trailer_url);
+        setValue("movie_url", setMovieUrl(movieData.movie_url));
+       
       });
   }, [movieid, setValue]);
 
@@ -55,13 +60,13 @@ function UpdateMovie() {
     formData.append("production", data.production);
     formData.append("cast", data.cast);
     formData.append("trailer_url", data.trailer_url);
-
+    formData.append("movie_url", movieUrl);
     if (file) {
       formData.append("poster_url", file);
     }
 
     axios
-      .patch(`http://localhost:5000/api/update/${movieid}`, formData)
+      .patch(`${baseUrl}/api/update/${movieid}`, formData)
       .then((response) => {
         console.log("Success:", response);
         alert(response.data.message);
@@ -131,11 +136,8 @@ function UpdateMovie() {
         <div className="page-content">
           <section id="basic-horizontal-layouts">
             <div className="row match-height">
-              <div className="col-md-6 col-12">
+              <div className="col-12">
                 <div className="card">
-                  <div className="card-header">
-                    <h4 className="card-title">Horizontal Form</h4>
-                  </div>
                   <div className="card-content">
                     <div className="card-body">
                       <form
@@ -144,254 +146,279 @@ function UpdateMovie() {
                       >
                         <div className="form-body">
                           <div className="row">
-                            <div className="col-md-4">
-                              <label>Title</label>
+                            <div class="col-md-6 col-12">
+                              <div class="form-group">
+                                <label>Title</label>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  name="title"
+                                  {...register("title", validationRules.title)}
+                                  placeholder="Movie title"
+                                />
+                                <p className="text-danger">
+                                  {errors?.title && errors.title.message}
+                                </p>
+                              </div>
                             </div>
-                            <div className="col-md-8 form-group">
-                              <input
-                                type="text"
-                                className="form-control"
-                                name="title"
-                                {...register("title", validationRules.title)}
-                                placeholder="Movie title"
-                              />
+
+                            <div class="col-md-6 col-12">
+                              <div class="form-group">
+                                <label>Duration</label>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  name="duration"
+                                  placeholder="Movie duration"
+                                  {...register(
+                                    "duration",
+                                    validationRules.duration
+                                  )}
+                                />
+                                <p className="text-danger">
+                                  {errors?.duration && errors.duration.message}
+                                </p>
+                              </div>
+                            </div>
+
+
+                            <div class="col-md-6 col-12">
+                              <div class="form-group">
+                                <label>Streaming Type</label>
+                                <select
+                                
+                                  name="genre"
+                                  style={{ border: "2px solid #e9f0f6 ",marginLeft: "30px" }} 
+                                  defaultValue=""
+                                  {...register(
+                                    "StreamingType",
+                                    validationRules.StreamingType
+                                  )}
+                                >
+                                  <option value="">Streaming Type</option>
+                                  <option value="In-Theaters">
+                                    In Theaters Now
+                                  </option>
+                                  <option value="OTT-Release">
+                                    OTT Release
+                                  </option>
+
+                                  {/* Add more genre options here */}
+                                </select>
+                                <p className="text-danger">
+                                  {errors?.StreamingType &&
+                                    errors.StreamingType.message}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div class="col-md-6 col-12">
+                              <div class="form-group">
+                                <label>Genre</label>
+                                <select
+                                  style={{ border: "2px solid #e9f0f6 ",marginLeft: "30px" }} 
+                                  name="genre"
+                                  defaultValue=""
+                                  {...register("genre", validationRules.genre)}
+                                >
+                                  <option value="">Select a genre</option>
+                                  <option value="action">Action</option>
+                                  <option value="comedy">Comedy</option>
+                                  <option value="drama">Drama</option>
+                                  <option value="horror">Horror</option>
+                                  <option value="thriller">Thriller</option>
+                                  <option value="action/drama">
+                                    Action/Drama
+                                  </option>
+                                  <option value="comedy/drama">
+                                    Comedy/Drama
+                                  </option>
+                                  <option value="horror/thriller">
+                                    Horror/Thriller
+                                  </option>
+                                  <option value="sci-fi/fantasy">
+                                    Science Fiction/Fantasy
+                                  </option>
+                                  <option value="romance/drama">
+                                    Romance/Drama
+                                  </option>
+                                  <option value="mystery/thriller">
+                                    Mystery/Thriller
+                                  </option>
+                                  {/* Add more genre options here */}
+                                </select>
+                                <p className="text-danger">
+                                  {errors?.genre && errors.genre.message}
+                                </p>
+                              </div>
+                            </div>
+                            
+                            <div class="col-md-6 col-12">
+                              <div class="form-group">
+                                <label>Release Date</label>
+                                <input
+                                  type="date"
+                                  className="form-control"
+                                  name="release_date"
+                                  {...register(
+                                    "release_date",
+                                    validationRules.release_date
+                                  )}
+                                  placeholder="Movie release date"
+                                />
+                                <p className="text-danger">
+                                  {errors?.release_date &&
+                                    errors.release_date.message}
+                                </p>
+                              </div>
+                            </div>
+
+                            <div class="col-md-6 col-12">
+                              <div class="form-group">
+                                <label>Language</label>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  name="language"
+                                  placeholder="Movie language"
+                                  {...register(
+                                    "language",
+                                    validationRules.language
+                                  )}
+                                />
+                              </div>
                               <p className="text-danger">
-                                {errors?.title && errors.title.message}
+                                {errors?.language && errors.language.message}
                               </p>
                             </div>
 
-                            <div className="col-md-4">
-                              <label>Streaming Type</label>
+                           
+                            <div class="col-md-6 col-12">
+                              <div class="form-group">
+                                <label>Director</label>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  name="director"
+                                  {...register(
+                                    "director",
+                                    validationRules.director
+                                  )}
+                                  placeholder="Movie director"
+                                />
+                                <p className="text-danger">
+                                  {errors?.director && errors.director.message}
+                                </p>
+                              </div>
                             </div>
-                            <div className="col-md-8 form-group">
-                              <select
-                                className="btn  dropdown-toggle dropdown-toggle-split"
-                                name="genre"
-                                defaultValue=""
-                                {...register(
-                                  "StreamingType",
-                                  validationRules.StreamingType
-                                )}
-                              >
-                                <option value="">Streaming Type</option>
-                                <option value="In-Theaters">
-                                  In Theaters Now
-                                </option>
-                                <option value="OTT-Release">OTT Release</option>
-
-                                {/* Add more genre options here */}
-                              </select>
-                              <p className="text-danger">
-                                {errors?.StreamingType &&
-                                  errors.StreamingType.message}
-                              </p>
+                            <div class="col-md-6 col-12">
+                              <div class="form-group">
+                                <label>Production</label>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  name="production"
+                                  {...register(
+                                    "production",
+                                    validationRules.production
+                                  )}
+                                  placeholder="Movie production"
+                                />
+                                <p className="text-danger">
+                                  {errors?.production &&
+                                    errors.production.message}
+                                </p>
+                              </div>
                             </div>
-
-                            <div className="col-md-4">
-                              <label>Genre</label>
-                            </div>
-                            <div className="col-md-8 form-group">
-                              <select
-                                className="btn dropdown-toggle dropdown-toggle-split"
-                                name="genre"
-                                defaultValue=""
-                                {...register("genre", validationRules.genre)}
-                              >
-                                <option value="">Select a genre</option>
-                                <option value="action">Action</option>
-                                <option value="comedy">Comedy</option>
-                                <option value="drama">Drama</option>
-                                <option value="horror">Horror</option>
-                                <option value="thriller">Thriller</option>
-                                <option value="action/drama">
-                                  Action/Drama
-                                </option>
-                                <option value="comedy/drama">
-                                  Comedy/Drama
-                                </option>
-                                <option value="horror/thriller">
-                                  Horror/Thriller
-                                </option>
-                                <option value="sci-fi/fantasy">
-                                  Science Fiction/Fantasy
-                                </option>
-                                <option value="romance/drama">
-                                  Romance/Drama
-                                </option>
-                                <option value="mystery/thriller">
-                                  Mystery/Thriller
-                                </option>
-                                {/* Add more genre options here */}
-                              </select>
-                              <p className="text-danger">
-                                {errors?.genre && errors.genre.message}
-                              </p>
+                            <div class="col-md-6 col-12">
+                              <div class="form-group">
+                                <label>Cast</label>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  name="cast"
+                                  {...register("cast", validationRules.cast)}
+                                  placeholder="Movie cast"
+                                />
+                                <p className="text-danger">
+                                  {errors?.cast && errors.cast.message}
+                                </p>
+                              </div>
                             </div>
 
-                            <div className="col-md-4">
-                              <label>Duration</label>
+                            <div class="col-md-6 col-12">
+                              <div class="form-group">
+                                <label>Poster URL</label>
+                                <input
+                                  type="file"
+                                  className="form-control"
+                                  name="poster_url"
+                                  onChange={(e) => setFile(e.target.files[0])}
+                                />
+                                <p className="text-danger">
+                                  {errors?.poster_url &&
+                                    errors.poster_url.message}
+                                </p>
+                              </div>
                             </div>
-                            <div className="col-md-8 form-group">
-                              <input
-                                type="text"
-                                className="form-control"
-                                name="duration"
-                                placeholder="Movie duration"
-                                {...register(
-                                  "duration",
-                                  validationRules.duration
-                                )}
-                              />
-                              <p className="text-danger">
-                                {errors?.duration && errors.duration.message}
-                              </p>
-                            </div>
-
-                            <div className="col-md-4">
-                              <label>Release Date</label>
-                            </div>
-                            <div className="col-md-8 form-group">
-                              <input
-                                type="date"
-                                className="form-control"
-                                name="release_date"
-                                {...register(
-                                  "release_date",
-                                  validationRules.release_date
-                                )}
-                                placeholder="Movie release date"
-                              />
-                              <p className="text-danger">
-                                {errors?.release_date &&
-                                  errors.release_date.message}
-                              </p>
+                            <div class="col-md-6 col-12">
+                              <div class="form-group">
+                                <label>Trailer URL</label>
+                                <input
+                                  type="text"
+                                  className="form-control"
+                                  name="trailer_url"
+                                  {...register(
+                                    "trailer_url",
+                                    validationRules.trailer_url
+                                  )}
+                                  placeholder="Movie trailer URL"
+                                />
+                                <p className="text-danger">
+                                  {errors?.trailer_url &&
+                                    errors.trailer_url.message}
+                                </p>
+                              </div>
                             </div>
 
-                            <div className="col-md-4">
-                              <label>Language</label>
-                            </div>
-                            <div className="col-md-8 form-group">
-                              <input
-                                type="text"
-                                className="form-control"
-                                name="language"
-                                placeholder="Movie language"
-                                {...register(
-                                  "language",
-                                  validationRules.language
-                                )}
-                              />
-                            </div>
-
-                            <div className="col-md-4">
-                              <label>Description</label>
-                            </div>
-                            <div className="col-md-8 form-group">
-                              <textarea
-                                className="form-control"
-                                name="description"
-                                {...register(
-                                  "description",
-                                  validationRules.description
-                                )}
-                                placeholder="Movie description"
-                              ></textarea>
-                              <p className="text-danger">
-                                {errors?.description &&
-                                  errors.description.message}
-                              </p>
+                            <div class="col-md-6 col-12">
+                              <div class="form-group">
+                                <label>Movie URL</label>
+                                <input
+                                  type="text"
+                                  value={movieUrl} 
+                                  className="form-control"
+                                  name="movie_url"
+                                  onChange={(e)=>{
+                                    setMovieUrl(e.target.value);
+                                  }}
+                                  placeholder="Movie URL"
+                                />
+                               
+                              </div>
                             </div>
 
-                            <div className="col-md-4">
-                              <label>Director</label>
-                            </div>
-                            <div className="col-md-8 form-group">
-                              <input
-                                type="text"
-                                className="form-control"
-                                name="director"
-                                {...register(
-                                  "director",
-                                  validationRules.director
-                                )}
-                                placeholder="Movie director"
-                              />
-                              <p className="text-danger">
-                                {errors?.director && errors.director.message}
-                              </p>
+
+                            <div class="col-md-6 col-12">
+                              <div class="form-group">
+                                <label>Description</label>
+                                <textarea
+                                  className="form-control"
+                                  name="description"
+                                  {...register(
+                                    "description",
+                                    validationRules.description
+                                  )}
+                                  placeholder="Movie description"
+                                ></textarea>
+                                <p className="text-danger">
+                                  {errors?.description &&
+                                    errors.description.message}
+                                </p>
+                              </div>
                             </div>
 
-                            <div className="col-md-4">
-                              <label>Production</label>
-                            </div>
-                            <div className="col-md-8 form-group">
-                              <input
-                                type="text"
-                                className="form-control"
-                                name="production"
-                                {...register(
-                                  "production",
-                                  validationRules.production
-                                )}
-                                placeholder="Movie production"
-                              />
-                              <p className="text-danger">
-                                {errors?.production &&
-                                  errors.production.message}
-                              </p>
-                            </div>
 
-                            <div className="col-md-4">
-                              <label>Cast</label>
-                            </div>
-                            <div className="col-md-8 form-group">
-                              <input
-                                type="text"
-                                className="form-control"
-                                name="cast"
-                                {...register("cast", validationRules.cast)}
-                                placeholder="Movie cast"
-                              />
-                              <p className="text-danger">
-                                {errors?.cast && errors.cast.message}
-                              </p>
-                            </div>
-
-                            <div className="col-md-4">
-                              <label>Poster URL</label>
-                            </div>
-                            <div className="col-md-8 form-group">
-                              <input
-                                type="file"
-                                className="form-control"
-                                name="poster_url"
-                                onChange={(e) => setFile(e.target.files[0])}
-                              />
-                              <p className="text-danger">
-                                {errors?.poster_url &&
-                                  errors.poster_url.message}
-                              </p>
-                            </div>
-
-                            <div className="col-md-4">
-                              <label>Trailer URL</label>
-                            </div>
-                            <div className="col-md-8 form-group">
-                              <input
-                                type="text"
-                                className="form-control"
-                                name="trailer_url"
-                                {...register(
-                                  "trailer_url",
-                                  validationRules.trailer_url
-                                )}
-                                placeholder="Movie trailer URL"
-                              />
-                              <p className="text-danger">
-                                {errors?.trailer_url &&
-                                  errors.trailer_url.message}
-                              </p>
-                            </div>
 
                             <div className="col-sm-12 d-flex justify-content-end">
                               <button

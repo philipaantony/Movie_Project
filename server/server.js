@@ -110,7 +110,7 @@ app.use("/api/postshowtime", AddShowTime);
 app.use("/api/getshowtime", getShowTime);
 app.use("/api/forgotpassword", forgotpassword);
 app.use("/api/moviebookings", userbookmovies);
-app.use("/api//save-movie", savemovies);
+app.use("/api/save-movie", savemovies);
 app.use("/api/fetchbookedseats", fetchbookedseats);
 app.use("/api/getfavmovies", favmovieslist);
 app.use("/api/getfavmovies", favmovieslist);
@@ -202,6 +202,7 @@ app.post("/api/addmovies", upload.single("poster_url"), async (req, res) => {
             production,
             cast,
             trailer_url,
+            movie_url
         } = req.body;
         const filename = req.file ? req.file.path : "";
         const poster_url = path.basename(filename);
@@ -219,10 +220,11 @@ app.post("/api/addmovies", upload.single("poster_url"), async (req, res) => {
             cast,
             poster_url,
             trailer_url,
+            movie_url: movie_url !== '' ? movie_url : 'no-url'
         });
         const result = await newMovie.save();
         if (result) {
-            console.log("succccces");
+
             res.status(201).json({ message: "Movie added successfully" });
         }
     } catch (error) {
@@ -355,6 +357,7 @@ app.patch(
                 production,
                 cast,
                 trailer_url,
+                movie_url
             } = req.body;
             const filename = req.file ? req.file.path : "";
             const poster_url = path.basename(filename);
@@ -376,6 +379,7 @@ app.patch(
                 ...(cast && { cast }),
                 ...(poster_url && { poster_url }),
                 ...(trailer_url && { trailer_url }),
+                ...(movie_url && { movie_url }),
             };
 
             // Find the movie by ID and update its details with the non-null fields

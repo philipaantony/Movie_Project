@@ -414,6 +414,7 @@ function UserHomePage2() {
                     cast: movie.cast,
                     trailer_url: movie.trailer_url,
                     StreamingType: movie.StreamingType,
+                    movie_url:movie.movie_url
                   };
                   if (movie.StreamingType === "OTT-Release") {
                     return (
