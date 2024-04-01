@@ -279,15 +279,23 @@ function Basic() {
       <ul>
         <li>
           <i className="bi bi-check-circle" />
-          Free Booking
+          Booking Available
         </li>
         <li>
           <i className="bi bi-check-circle" />
-          Explore all Movies
+          View all Movies
         </li>
         <li>
           <i className="bi bi-check-circle" />
           Save Movies
+        </li>
+        <li>
+          <i className="bi bi-check-circle" />
+          Edit Profile
+        </li>
+        <li>
+          <i className="bi bi-check-circle" />
+          Book Events
         </li>
       </ul>
     </>
@@ -313,19 +321,19 @@ function Premium() {
         </li>
         <li>
           <i className="bi bi-check-circle" />
-          All movie genres available
+          Watch all Movies
         </li>
         <li>
           <i className="bi bi-check-circle" />
-          4K UHD streaming available
+          Edit Profile
         </li>
         <li>
           <i className="bi bi-check-circle" />
-          Early access to new releases
+          Book Events
         </li>
         <li>
           <i className="bi bi-check-circle" />
-          Offline viewing option
+          Stream all available movies
         </li>
       </ul>
     </>

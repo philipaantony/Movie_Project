@@ -7,6 +7,7 @@ function UserAboutPage() {
     <div id="app">
     <div style={{}} className="layout-navbar">
     <UserNavBar activeabout="active"/>
+    
     <div className="container mt-5">
     <div className="row">
         <div className="col-md-6">
