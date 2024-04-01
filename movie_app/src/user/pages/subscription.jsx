@@ -4,12 +4,28 @@ import UserNavBar from "../usernavbar/usernavbar";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
 import AddTaskIcon from '@mui/icons-material/AddTask';
+import { useLocation } from "react-router-dom";
+import { toast, Toaster } from "react-hot-toast";
 
 function Subscription() {
 
   const userId = localStorage.getItem("userId");
   const [subscriptionPlan, setSubscriptionPlan] = useState('basic');
   const [refresh,setRefresh] = useState(true);
+  const location = useLocation();
+ 
+  useEffect(() => {
+    if (location.state && location.state.toast) {
+     
+      toast(
+        "You need Premium Plan to view movie.\nUpdate your plan to enjoy the movie",
+        {
+          duration: 3000,
+        }
+      );
+    }
+  }, [location]);
+  
   useEffect(() => {
     const fetchSubscriptionPlan = async () => {
         try {
@@ -145,6 +161,10 @@ function Subscription() {
   return (
     <div>
       <UserNavBar />
+      <div>
+        <Toaster  position="top-right"
+  reverseOrder={false} />
+      </div>
       <section className="section">
         <br />
         <br />
@@ -297,6 +317,10 @@ function Basic() {
           <i className="bi bi-check-circle" />
           Book Events
         </li>
+        <li>
+          <i className="bi bi-check-circle" />
+          HD streaming available
+        </li>
       </ul>
     </>
   );
@@ -312,16 +336,17 @@ function Premium() {
 
       <h1 className="price">₹499</h1>
       <ul>
-        <li>
+      <li>
           <i className="bi bi-check-circle" />1 Year Plan
         </li>
-        <li>
+      <li>
           <i className="bi bi-check-circle" />
-          Access to unlimited movies
+          Booking Available
         </li>
+        
         <li>
           <i className="bi bi-check-circle" />
-          Watch all Movies
+          Save Movies
         </li>
         <li>
           <i className="bi bi-check-circle" />
@@ -331,6 +356,18 @@ function Premium() {
           <i className="bi bi-check-circle" />
           Book Events
         </li>
+
+       
+        <li>
+          <i className="bi bi-check-circle" />
+          Access to unlimited movies
+        </li>
+        <li>
+          <i className="bi bi-check-circle" />
+          Watch all Movies
+        </li>
+       
+      
         <li>
           <i className="bi bi-check-circle" />
           Stream all available movies
@@ -354,16 +391,30 @@ function Standard() {
         </li>
         <li>
           <i className="bi bi-check-circle" />
+          Booking Available
+        </li>
+        <li>
+          <i className="bi bi-check-circle" />
+          View all Movies
+        </li>
+        <li>
+          <i className="bi bi-check-circle" />
+          Save Movies
+        </li>
+        <li>
+          <i className="bi bi-check-circle" />
+          Edit Profile
+        </li>
+        <li>
+          <i className="bi bi-check-circle" />
+          Book Events
+        </li>
+        <li>
+          <i className="bi bi-check-circle" />
           Access to unlimited movies
         </li>
-        <li>
-          <i className="bi bi-check-circle" />
-          Expanded movie genres
-        </li>
-        <li>
-          <i className="bi bi-check-circle" />
-          HD streaming available
-        </li>
+      
+      
       </ul>
     </>
   );

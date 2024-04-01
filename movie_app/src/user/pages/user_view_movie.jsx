@@ -71,6 +71,7 @@ function UserViewMovie() {
 
   return (
     <div>
+       
       <UserNavBar activehome="active" />
 
       <div>
@@ -197,8 +198,9 @@ function UserViewMovie() {
                 </> :<>
                 <button
                         onClick={() => {
+                        
                           navigate("/subscription", {
-                           
+                           state:{toast:true}
                           });
                         }}
                         className="btn btn-danger btn-lg me-3"
