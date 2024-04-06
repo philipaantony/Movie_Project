@@ -67,7 +67,7 @@ function ExploreHome() {
 
   return (
     <div>
-      <UserNavBar />
+      <UserNavBar a="active"  />
       <br />
       <GoBackButton />
       {isLoading ? (

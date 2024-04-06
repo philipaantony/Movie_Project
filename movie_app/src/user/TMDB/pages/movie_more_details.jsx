@@ -15,7 +15,7 @@ function MovieMoreDetails() {
 
   return (
     <div>
-      <UserNavBar />
+      <UserNavBar   />
       <GoBackButton />
       {movie && (
         <div className="container mt-5">

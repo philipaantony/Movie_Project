@@ -63,7 +63,7 @@ function UserNavBar(props) {
           <Link to="/exploremore">
             <li
               style={{ color: "white" }}
-              className={`nav-item ${props.activeexploremore}`}
+              className={`nav-item ${props.a}`}
             >
               Explore More
             </li>
@@ -81,7 +81,7 @@ function UserNavBar(props) {
 
           <div style={{ width: "40px" }}></div>
 
-          <LocationPicker />
+          {/* <LocationPicker /> */}
         </ul>
 
         <nav className="navbar navbar-expand navbar-light ">

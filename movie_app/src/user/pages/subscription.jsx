@@ -3,20 +3,18 @@ import Footer from "../../footer/footer";
 import UserNavBar from "../usernavbar/usernavbar";
 import axios from "axios";
 import { baseUrl } from "../../config/config";
-import AddTaskIcon from '@mui/icons-material/AddTask';
+import AddTaskIcon from "@mui/icons-material/AddTask";
 import { useLocation } from "react-router-dom";
 import { toast, Toaster } from "react-hot-toast";
 
 function Subscription() {
-
   const userId = localStorage.getItem("userId");
-  const [subscriptionPlan, setSubscriptionPlan] = useState('basic');
-  const [refresh,setRefresh] = useState(true);
+  const [subscriptionPlan, setSubscriptionPlan] = useState("basic");
+  const [refresh, setRefresh] = useState(true);
   const location = useLocation();
- 
+
   useEffect(() => {
     if (location.state && location.state.toast) {
-     
       toast(
         "You need Premium Plan to view movie.\nUpdate your plan to enjoy the movie",
         {
@@ -25,22 +23,23 @@ function Subscription() {
       );
     }
   }, [location]);
-  
+
   useEffect(() => {
     const fetchSubscriptionPlan = async () => {
-        try {
-            const response = await axios.get(`${baseUrl}/api/get-my-subscriptions/${userId}`);
-            setSubscriptionPlan(response.data.subscription_plan);
-            console.log(response.data.subscription_plan);
-        } catch (error) {
-            console.error('Error fetching subscription plan:', error);
-        }
+      try {
+        const response = await axios.get(
+          `${baseUrl}/api/get-my-subscriptions/${userId}`
+        );
+        setSubscriptionPlan(response.data.subscription_plan);
+        console.log(response.data.subscription_plan);
+      } catch (error) {
+        console.error("Error fetching subscription plan:", error);
+      }
     };
     fetchSubscriptionPlan();
-}, [refresh]); 
+  }, [refresh]);
 
-
-  async function displayRazorpay(totalPrice,plan) {
+  async function displayRazorpay(totalPrice, plan) {
     const subscription_plan = plan;
     const res = await loadScript(
       "https://checkout.razorpay.com/v1/checkout.js"
@@ -90,7 +89,12 @@ function Subscription() {
         const orderId = result.data.orderId;
         const paymentId = result.data.paymentId;
         if (result.data.msg === "success") {
-          PurchasePlan(orderId, paymentId, amount.toString(),subscription_plan);
+          PurchasePlan(
+            orderId,
+            paymentId,
+            amount.toString(),
+            subscription_plan
+          );
         }
       },
       prefill: {
@@ -124,53 +128,62 @@ function Subscription() {
     });
   }
 
-  const PurchasePlan = (orderId, paymentId, amount,plan) => {
-    console.log("my data to be passed...")
+  const PurchasePlan = (orderId, paymentId, amount, plan) => {
+    console.log("my data to be passed...");
     const subscription_plan = plan;
-    let plan_validity
-    if(subscription_plan ==="standard")
-    {
-      plan_validity ="6"
+    let plan_validity;
+
+    if (subscription_plan === "standard") {
+      plan_validity = "6";
+    } else {
+      plan_validity = "12";
     }
-    else{
-      plan_validity ="12"
-    }
-    const payment_date = Date.now(); 
-    const mydata = {
-      userId,
-      subscription_plan,
-      orderId,
-      paymentId,
-      payment_date,
-      plan_validity}
+
+    const currentDate = new Date();
+let expirationDate;
+
+if (plan_validity === "6") {
+  expirationDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 6, currentDate.getDate(), 18, 30, 0, 0);
+
+} else if (plan_validity === "12") {
+  expirationDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 12, currentDate.getDate(), 18, 30, 0, 0);
+
+}
+
+const payment_date = Date.now();
+const mydata = {
+  userId,
+  subscription_plan,
+  orderId,
+  paymentId,
+  payment_date,
+  plan_validity: expirationDate.toISOString(),
+};
     console.log(mydata);
 
-    axios.post(`${baseUrl}/api/subscriptions`, mydata)
-    .then(response => {
-        console.log('Data posted successfully:', response.data);
+    axios
+      .post(`${baseUrl}/api/subscriptions`, mydata)
+      .then((response) => {
+        console.log("Data posted successfully:", response.data);
         setRefresh(!refresh);
         alert(response.data.message);
-    })
-    .catch(error => {
-        console.error('Error posting data:', error);
-    });
-    
-  }
-
+      })
+      .catch((error) => {
+        console.error("Error posting data:", error);
+      });
+  };
 
   return (
     <div>
       <UserNavBar />
       <div>
-        <Toaster  position="top-right"
-  reverseOrder={false} />
+        <Toaster position="top-right" reverseOrder={false} />
       </div>
       <section className="section">
         <br />
         <br />
         <center>
           <h4 className="card-title">Choose Your Movie Subscription Plan</h4>
-          
         </center>
 
         <div className="col-12 col-md-8 offset-md-2">
@@ -180,23 +193,21 @@ function Subscription() {
                 <div className="card">
                   <Basic />
                   <div className="card-footer">
-                  {subscriptionPlan ==="basic" ? 
-                    
-                    <>
-                    <button className="btn btn-success btn-block">
-                      {" "}
-                      <i className="bi bi-check-circle" /> Current Plan
-                    </button>
-                    </>:
-                    <>
-                
-              
-                <AddTaskIcon/>
-                <span style={{paddingLeft:"10px"}}>
-                You are on {subscriptionPlan}
-                </span>
-        
-                    </>}
+                    {subscriptionPlan === "basic" ? (
+                      <>
+                        <button className="btn btn-success btn-block">
+                          {" "}
+                          <i className="bi bi-check-circle" /> Current Plan
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <AddTaskIcon />
+                        <span style={{ paddingLeft: "10px" }}>
+                          You are on {subscriptionPlan}
+                        </span>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -205,28 +216,26 @@ function Subscription() {
                 <div className="card card-highlighted">
                   <Standard />
                   <div className="card-footer">
-                    {subscriptionPlan ==="standard" ? 
-                    
-                  
-                    <button className="btn btn-outline-white btn-block btn btn-success ">
-                      {" "}
-                      <i className="bi bi-check-circle" /> Current Plan
-                    </button>
-                    : subscriptionPlan ==="premium"?<div style={{ color: 'white' }}>
-                    <AddTaskIcon />
-                    <span style={{paddingLeft:"10px"}}>
-                You are on {subscriptionPlan}</span>
-                    </div>:
-                  
-
-                    <button 
-                    onClick={() => displayRazorpay('299','standard')}
-                    className="btn btn-outline-white btn-block">
-                      Order Now
-                    </button>
-                    
-                    }
-                    
+                    {subscriptionPlan === "standard" ? (
+                      <button className="btn btn-outline-white btn-block btn btn-success ">
+                        {" "}
+                        <i className="bi bi-check-circle" /> Current Plan
+                      </button>
+                    ) : subscriptionPlan === "premium" ? (
+                      <div style={{ color: "white" }}>
+                        <AddTaskIcon />
+                        <span style={{ paddingLeft: "10px" }}>
+                          You are on {subscriptionPlan}
+                        </span>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => displayRazorpay("299", "standard")}
+                        className="btn btn-outline-white btn-block"
+                      >
+                        Order Now
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
@@ -234,24 +243,23 @@ function Subscription() {
                 <div className="card">
                   <Premium />
                   <div className="card-footer">
-                  
-
-                    {subscriptionPlan ==="premium" ? 
-                    
-                    <>
-                    <button className="btn btn-success btn-block">
-                      {" "}
-                      <i className="bi bi-check-circle" /> Current Plan
-                    </button>
-                    </>:
-                    <>
-                     <button 
-                      onClick={() => displayRazorpay('499','premium')}
-                    className="btn btn-primary btn-block">
-                      Order Now
-                    </button>
-                    
-                    </>}
+                    {subscriptionPlan === "premium" ? (
+                      <>
+                        <button className="btn btn-success btn-block">
+                          {" "}
+                          <i className="bi bi-check-circle" /> Current Plan
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => displayRazorpay("499", "premium")}
+                          className="btn btn-primary btn-block"
+                        >
+                          Order Now
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -269,24 +277,6 @@ function Subscription() {
 }
 
 export default Subscription;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function Basic() {
   return (
@@ -336,14 +326,14 @@ function Premium() {
 
       <h1 className="price">₹499</h1>
       <ul>
-      <li>
+        <li>
           <i className="bi bi-check-circle" />1 Year Plan
         </li>
-      <li>
+        <li>
           <i className="bi bi-check-circle" />
           Booking Available
         </li>
-        
+
         <li>
           <i className="bi bi-check-circle" />
           Save Movies
@@ -357,7 +347,6 @@ function Premium() {
           Book Events
         </li>
 
-       
         <li>
           <i className="bi bi-check-circle" />
           Access to unlimited movies
@@ -366,8 +355,7 @@ function Premium() {
           <i className="bi bi-check-circle" />
           Watch all Movies
         </li>
-       
-      
+
         <li>
           <i className="bi bi-check-circle" />
           Stream all available movies
@@ -413,8 +401,6 @@ function Standard() {
           <i className="bi bi-check-circle" />
           Access to unlimited movies
         </li>
-      
-      
       </ul>
     </>
   );

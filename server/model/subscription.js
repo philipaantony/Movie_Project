@@ -24,7 +24,7 @@ const subscriptionSchema = new Schema({
         required: true
     },
     plan_validity: {
-        type: Number,
+        type: Date,
         required: true
     },
 }, {

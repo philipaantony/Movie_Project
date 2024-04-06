@@ -13,10 +13,24 @@ router.get('/:userId', async (req, res) => {
             return res.status(404).json({ message: 'Subscription not found for the given user ID' });
         }
 
-        res.status(200).json({ subscription_plan: subscription.subscription_plan });
+        // Check if validity is less than today's date
+        const validityDate = new Date(subscription.plan_validity);
+        const currentDate = new Date();
+
+        if (validityDate < currentDate) {
+            // Update subscription plan to basic
+            subscription.subscription_plan = 'basic';
+            await subscription.save();
+        }
+
+        res.status(200).json({
+            subscription_plan: subscription.subscription_plan,
+            validity: subscription.plan_validity
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
 module.exports = router;
+

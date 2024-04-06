@@ -64,32 +64,46 @@ function GetId() {
                         </div>
                     </div>
                 </div>
-                <div className="row justify-content-center">
-                    <div className="col-lg-12">
-                        <div className="row">
-                            {movies.flat().map((movie, index) => (
-                                <div key={index} className="col-lg-2">
-                                    <div className="card mb-3">
-                                        <img
-                                            src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                                            onError={(e) => {
-                                                e.target.onerror = null;
-                                                e.target.src = "https://image.tmdb.org/t/p/w500/k3AjjlEH1Rb9YhmTTaHe9lNfECF.jpg";
-                                            }}
-                                            className="card-img-top"
-                                            alt={movie.original_title}
-                                            style={{ height: "300px", objectFit: "cover" }}
-                                        />
-                                        <div className="card-body">
-                                            <h5 className="card-title">{movie.title}</h5>
-                                        </div>
-                                    </div>
+
+
+                
+                <div className="container">
+    <div className="row row-cols-1 row-cols-md-6 g-4">
+        {movies.map((movieArray, arrayIndex) => (
+            movieArray.slice(0, 1).map((movie, index) => (
+                <div key={arrayIndex * 6 + index} className="col">
+
+
+                 <div className="card mb-3">
+                                <img
+                                    src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                                    onError={(e) => {
+                                        e.target.onerror = null;
+                                        e.target.src = "https://image.tmdb.org/t/p/w500/k3AjjlEH1Rb9YhmTTaHe9lNfECF.jpg";
+                                    }}
+                                    className="card-img-top"
+                                    alt={movie.original_title}
+                                    style={{ height: "300px", objectFit: "cover" }}
+                                />
+                                <div className="card-body">
+                                    <h5 className="card-title">{movie.title}</h5>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
+                            </div>
+
                 </div>
+            ))
+        ))}
+    </div>
+</div>
+
+            
+      
+
+
             </div>
+
+            
+
             <Footer/>
         </div>
     );
