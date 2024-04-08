@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { logout } from "../../Redux/user/userSlice";
 import LocationPicker from "../componets/LocationPicker";
 import { baseUrl } from "../../config/config";
+import SearchIcon from '@mui/icons-material/Search';
 
 function UserNavBar(props) {
   const username = localStorage.getItem("name");
@@ -94,6 +95,12 @@ function UserNavBar(props) {
             <div style={{ padding: "20px" }}>
               <BookmarkBorderIcon />
             </div>
+         
+            <Link to="/id">
+            <div style={{ padding: "20px" }}>
+            <SearchIcon/>
+            </div>
+            </Link>
           </div>
           <div className="user-menu d-flex">
             <div style={{ paddingRight: "20px" }}>
