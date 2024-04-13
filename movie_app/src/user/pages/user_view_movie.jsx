@@ -200,7 +200,9 @@ function UserViewMovie() {
                         onClick={() => {
                         
                           navigate("/subscription", {
-                           state:{toast:true}
+                           state:{toast:true,
+                            msg:"You need Premium Plan to view movie.\nUpdate your plan to enjoy the movie"
+                          }
                           });
                         }}
                         className="btn btn-danger btn-lg me-3"

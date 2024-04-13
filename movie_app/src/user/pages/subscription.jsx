@@ -16,7 +16,7 @@ function Subscription() {
   useEffect(() => {
     if (location.state && location.state.toast) {
       toast(
-        "You need Premium Plan to view movie.\nUpdate your plan to enjoy the movie",
+        location.state.msg,
         {
           duration: 3000,
         }

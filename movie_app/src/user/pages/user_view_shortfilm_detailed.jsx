@@ -4,6 +4,7 @@ import UserNavBar from "../usernavbar/usernavbar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { baseUrl } from "../../config/config";
 import Maincard from "../componets/moviecards/maincard";
+import axios from "axios";
 
 function UserMyFilm() {
     const navigate = useNavigate();
@@ -52,6 +53,25 @@ function UserMyFilm() {
     }
   }, [isReleased]);
 
+
+  const [subscriptionPlan, setSubscriptionPlan] = useState('basic');
+  const userId = localStorage.getItem("userId");
+  useEffect(() => {
+    const fetchSubscriptionPlan = async () => {
+        try {
+            const response = await axios.get(`${baseUrl}/api/get-my-subscriptions/${userId}`);
+            setSubscriptionPlan(response.data.subscription_plan);
+            console.log(response.data.subscription_plan);
+        } catch (error) {
+            console.error('Error fetching subscription plan:', error);
+        }
+    };
+    fetchSubscriptionPlan();
+}, []); 
+
+
+
+
   if (!movieData) {
     // Handle case when movieData is not available
     return (
@@ -68,6 +88,7 @@ function UserMyFilm() {
   return (
     <>
       <UserNavBar />
+
       <div className="container mt-5">
         <div className="row">
           {!isReleased && (
@@ -116,7 +137,9 @@ function UserMyFilm() {
             {/* Display the countdown timer */}
 
             <div className="my-3">
-              <button
+
+{subscriptionPlan ==="premium" || subscriptionPlan ==='standard' ? <>
+<button
                 className="btn btn-danger me-3"
                 onClick={() => {
                   navigate("/play-my-movie", {
@@ -127,6 +150,28 @@ function UserMyFilm() {
               >
                 Watch Now
               </button>
+</>:<>
+<button
+                className="btn btn-danger me-3"
+                onClick={() => {
+                        
+                  navigate("/subscription", {
+                   state:{toast:true,
+                  msg:"You need Standard Plan to view movie.\nUpdate your plan to enjoy the movie"
+                  }
+                  });
+                }}
+                disabled={!isReleased} // Disable the button if the movie is not released
+              >
+                Watch Now
+              </button></>}
+<>
+              
+              </>
+
+
+
+
               <button className="btn btn-primary" onClick={() => ""}>
                 Save
               </button>
