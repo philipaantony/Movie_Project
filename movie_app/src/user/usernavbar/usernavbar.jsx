@@ -92,9 +92,11 @@ function UserNavBar(props) {
               <SubscriptionsSharpIcon />
               </Link>
             </div>
+            <Link to="/favmovies">
             <div style={{ padding: "20px" }}>
               <BookmarkBorderIcon />
             </div>
+            </Link>
          
             <Link to="/id">
             <div style={{ padding: "20px" }}>

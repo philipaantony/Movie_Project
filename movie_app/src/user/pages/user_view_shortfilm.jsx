@@ -97,15 +97,17 @@ function UserViewShortFilm() {
               })}
             </div>
 
-            <h3>Comiing Soon</h3>
+            
             <div className="row row-cols-1 row-cols-md-5 g-4">
+            
               {movies.map((movie, index) => {
                 const data = {
                   movie,
                 };
                 const releaseDate = new Date(movie.release_date);
                 if (releaseDate > today) {
-                  return (
+                  return (<>
+                    <h3>Comiing Soon</h3>
                     <div
                       key={index}
                       className="col"
@@ -138,6 +140,7 @@ function UserViewShortFilm() {
                         </div>
                       </div>
                     </div>
+                    </>
                   );
                 }
               })}

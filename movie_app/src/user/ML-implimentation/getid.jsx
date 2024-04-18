@@ -119,6 +119,7 @@ function GetId() {
                     placeholder="Enter search term"
                   />
                   <button
+                  type="submit"
                     className="btn btn-primary"
                     style={{
                       background: "blue",
@@ -138,9 +139,11 @@ function GetId() {
       </div>
       <div className="container mt-5">
       {loading && (
-        <div className="d-flex justify-content-center mt-5">
-          <div className="spinner-border" role="status">
+        <div  style={{height:"100px"}} className="d-flex justify-content-center mt-5">
+          <div  className="spinner-border" role="status">
+            <br></br>
             <span className="sr-only">Loading...</span>
+            
           </div>
         </div>
       )}

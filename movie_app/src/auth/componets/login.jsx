@@ -147,6 +147,7 @@ function Login() {
                 <form role="form text-left" onSubmit={handleSubmit(onSubmit)}>
                   <div className={`mb-3 ${errors.email ? "has-danger" : ""}`}>
                     <input
+                    
                       type="email"
                       name="email"
                       {...register("email", validationRules.email)}

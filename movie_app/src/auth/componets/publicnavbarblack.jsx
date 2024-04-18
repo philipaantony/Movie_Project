@@ -55,15 +55,7 @@ function Publicnavbarblack(props) {
                     </Link>
                     <div style={{ width: "40px" }}></div>
                     
-                    <div class="form-group has-search">
-                        
-                        <input type="text" class="form-control" placeholder="Search movie, shows...." />
-                        
-                    </div>
-                    <div style={{ width: "3px" }}></div>
-                    <div class="form-group has-search">
-                    <button type="button" class="btn btn-outline-light">Search</button>
-                    </div>
+                
                 </ul>
                 <nav className="navbar navbar-expand navbar-light ">
                     <div className="container-fluid">
