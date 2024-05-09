@@ -172,9 +172,7 @@ function UserMyFilm() {
 
 
 
-              <button className="btn btn-primary" onClick={() => ""}>
-                Save
-              </button>
+           
             </div>
           </div>
         </div>

@@ -30,7 +30,7 @@ function CreateSeatOrientation() {
         rows: {
             required: "Number of Rows is required",
             max: {
-                value: 20,
+                value: 25,
                 message: "Number of Rows must not exceed 20",
             },
         },
@@ -70,8 +70,8 @@ function CreateSeatOrientation() {
 
     };
 
-    const [rows, setRows] = useState('10');
-    const [columns, setColumns] = useState('10');
+    const [rows, setRows] = useState(5);
+    const [columns, setColumns] = useState(10);
     const [unavailableseats, setunavailableseats] = useState([]);
     const [selectedSeats, setSelectedSeats] = useState([]);
 
@@ -174,7 +174,13 @@ function CreateSeatOrientation() {
                                 value={rows}
                                 name="rows"
                                 {...register("rows", validationRules.rows)}
-                                onChange={(event) => setRows(event.target.value)} />
+                                onChange={(event) => {
+                                    const newValue = parseInt(event.target.value, 10); // Parse the input value to an integer
+                                    if (!isNaN(newValue) && newValue >= 5 && newValue <= 25) { // Check if it's a valid number between 2 and 25
+                                        setRows(newValue);
+                                    }
+                                }}
+                            />
                             <p className="text-danger">
                                 {errors?.rows && <p className="text-danger">{errors.rows.message}</p>}
                             </p>
@@ -186,7 +192,14 @@ function CreateSeatOrientation() {
                                 value={columns}
                                 name="columns"
                                 {...register("columns", validationRules.columns)}
-                                onChange={(event) => setColumns(event.target.value)} />
+                                onChange={(event) => {
+                                    const newValue = parseInt(event.target.value, 10); // Parse the input value to an integer
+                                    if (!isNaN(newValue) && newValue >= 5 && newValue <= 25) { // Check if it's a valid number between 2 and 25
+                                        setColumns(newValue);
+                                    }
+                                }}
+
+                            />
                             <p className="text-danger">
                                 {errors?.columns && <p className="text-danger">{errors.columns.message}</p>}
                             </p>

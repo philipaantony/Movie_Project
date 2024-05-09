@@ -118,9 +118,11 @@ function Register() {
        <div className="col-xl-4 col-lg-5 col-md-7 mx-auto" style={{width:"430px"}}>
          <div className="card z-index-0">
           <div className="card-header text-center pt-4">
-          <h5>Login with</h5>
+          <h5>
+          Registration Form
+          </h5>
           <p className="">
-                  Log in with your data that you entered during registration.
+                   Registration Here.
           </p>
         </div>
         

@@ -86,7 +86,8 @@ function Login() {
           {
             dispatch(login({userid:userId ,useremail: email }));
             navigate("/eventhome");
-            alert("Login Successfull as Host")
+            //alert("Login Successfull as Host");
+            toast.success("Login Successfull as Host")
           }
           else{
           

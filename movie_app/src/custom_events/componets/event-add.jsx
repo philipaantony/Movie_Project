@@ -12,8 +12,8 @@ function AddNewEvent() {
     String.fromCharCode(65 + i)
   );
 
-  const [rows, setRows] = useState("5");
-  const [columns, setColumns] = useState("10");
+  const [rows, setRows] = useState(5);
+  const [columns, setColumns] = useState(10);
   const [unavailableseats, setunavailableseats] = useState([]);
   const [selectedSeats, setSelectedSeats] = useState([]);
 
@@ -449,9 +449,13 @@ function AddNewEvent() {
                                         "rows",
                                         validationRules.rows
                                       )}
-                                      onChange={(event) =>
-                                        setRows(event.target.value)
-                                      }
+                                      onChange={(event) => {
+                                        const newValue = parseInt(event.target.value, 10); // Parse the input value to an integer
+                                        if (!isNaN(newValue) && newValue >= 2 && newValue <= 25) { // Check if it's a valid number between 2 and 25
+                                          setRows(newValue);
+                                        }
+                                      }}
+                                      
                                     />
                                     <p className="text-danger">
                                       {errors?.rows && (
@@ -477,9 +481,13 @@ function AddNewEvent() {
                                         "columns",
                                         validationRules.columns
                                       )}
-                                      onChange={(event) =>
-                                        setColumns(event.target.value)
-                                      }
+                                      onChange={(event) => {
+                                        const newValue = parseInt(event.target.value, 10); // Parse the input value to an integer
+                                        if (!isNaN(newValue) && newValue >= 2 && newValue <= 25) { // Check if it's a valid number between 2 and 25
+                                          setColumns(newValue);
+                                        }
+                                      }}
+                                      
                                     />
                                     <p className="text-danger">
                                       {errors?.columns && (
